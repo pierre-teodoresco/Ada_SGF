@@ -1,5 +1,9 @@
 # Object file
-*.o
+/obj
 
-# Ada Library Information
-*.ali
+# Binaries
+/bin
+
+# vs code
+.vscode
+/DS_Store
