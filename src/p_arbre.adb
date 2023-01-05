@@ -22,7 +22,7 @@ package body P_Arbre is
     -- résultat: vrai si l'arbre est vide, faux sinon
     function Est_vide(F_arbre: in Arbre) return Boolean is
     begin
-        return F_arbre.all.Fils = null;
+        return F_arbre = null;
     end Est_vide;
 
     -- fonction Pere: retourne le père d'un noeud
@@ -82,11 +82,10 @@ package body P_Arbre is
     procedure Afficher(F_arbre: in Arbre) is
     begin
         if Est_vide(F_arbre) then
-            Put_Line("Arbre vide");
+            null;
         else
-            Put(F_arbre.all.Valeur, 4);
+            Put_Line(Integer'Image(F_arbre.all.Valeur));
             Afficher(F_arbre.all.Frere);
-            New_Line;
             Afficher(F_arbre.all.Fils);
         end if;
     end Afficher;
@@ -109,7 +108,7 @@ package body P_Arbre is
     procedure Inserer(F_arbre: in out Arbre; F_valeur: in Integer) is
         T_noeud: Arbre;
     begin
-        if Est_vide(F_arbre) then
+        if Est_vide(F_arbre.all.Fils) then
             F_arbre.all.Fils := new Noeud'(Pere => F_arbre, Fils => null, Frere => null, Valeur => F_valeur);
         else
             -- On se place sur le dernier fils

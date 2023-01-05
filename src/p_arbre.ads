@@ -6,8 +6,8 @@ package P_Arbre is
 
     -- procedure Creer: crée un arbre vide
     -- paramètres: F_arbre: arbre à créer
-    procedure Creer(F_arbre: out Arbre) with Post => Est_vide(F_arbre);
-
+    procedure Creer(F_arbre: out Arbre);
+    
     -- fonction Est_vide: teste si un arbre est vide
     -- paramètres: F_arbre: arbre à tester
     -- résultat: vrai si l'arbre est vide, faux sinon
