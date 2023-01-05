@@ -54,3 +54,28 @@ R2: Comment A13?
 ```
     Afficher(F_noeud^.Frere)
 ```
+
+#### Detruire
+R0: Détruire un arbre
+R1: Comment R0
+```
+    Si F_noeud = NULL Alors
+        Rien
+    Sinon
+A11     Détruire les fils de F_noeud            in F_noeud
+A12     Détruire les frères de F_noeud          in F_noeud
+A13     Détruire le noeud F_noeud               in F_noeud
+    Fin Si
+```
+R2: Comment A11?
+```
+    Detruire(F_noeud^.Fils)
+```
+R2: Comment A12?
+```
+    Detruire(F_noeud^.Frere)
+```
+R2: Comment A13?
+```
+    Liberer(F_noeud)
+```

@@ -6,7 +6,7 @@ package body P_Arbre is
 
     -- implémentation de Unchecked_Deallocation
     procedure Liberer is
-        new Ada.Unchecked_Deallocation (Arbre, Noeud);
+        new Ada.Unchecked_Deallocation(Noeud, Arbre);
 
     -- implémentation des sous-programmes de P_Arbre
 
@@ -14,7 +14,7 @@ package body P_Arbre is
     -- paramètres: F_arbre: arbre à créer
     procedure Creer(F_arbre: out Arbre) is
     begin
-        F_arbre := new Noeud'(Pere => null, Fils => null, Frere => null, Valeur => 0);
+        F_arbre := null;
     end Creer;
 
     -- fonction Est_vide: teste si un arbre est vide
@@ -75,7 +75,7 @@ package body P_Arbre is
 
     -- procedure Supprimer: supprime un noeud et ses fils
     -- paramètres: F_noeud: noeud à supprimer
-    procedure Supprimer(F_noeud: in out Arbre);
+    --procedure Supprimer(F_noeud: in out Arbre);
 
     -- procedure Afficher: affiche un arbre
     -- paramètres: F_arbre: arbre à afficher
@@ -93,6 +93,34 @@ package body P_Arbre is
 
     -- procedure Detruire: détruit un arbre
     -- paramètres: F_arbre: arbre à détruire
-    procedure Detruire(F_arbre: in out Arbre);
+    procedure Detruire(F_arbre: in out Arbre) is
+    begin
+        if Est_vide(F_arbre) then
+            null;
+        else
+            Detruire(F_arbre.all.Fils);
+            Detruire(F_arbre.all.Frere);
+            Liberer(F_arbre);
+        end if;
+    end Detruire;
+
+    -- TESTS
+
+    procedure Inserer(F_arbre: in out Arbre; F_valeur: in Integer) is
+        T_noeud: Arbre;
+    begin
+        if Est_vide(F_arbre) then
+            F_arbre.all.Fils := new Noeud'(Pere => F_arbre, Fils => null, Frere => null, Valeur => F_valeur);
+        else
+            -- On se place sur le dernier fils
+            T_noeud := F_arbre.all.Fils;
+            while T_noeud.all.Frere /= null loop
+                T_noeud := T_noeud.all.Frere;
+            end loop;
+
+            -- Ajout du fils
+            T_noeud.all.Frere := new Noeud'(Pere => F_arbre, Fils => null, Frere => null, Valeur => F_valeur);
+        end if;
+    end Inserer;
 
 end P_Arbre;

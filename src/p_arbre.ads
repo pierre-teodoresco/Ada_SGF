@@ -35,7 +35,7 @@ package P_Arbre is
 
     -- procedure Supprimer: supprime un noeud et ses fils
     -- paramètres: F_noeud: noeud à supprimer
-    procedure Supprimer(F_noeud: in out Arbre);
+   -- procedure Supprimer(F_noeud: in out Arbre);
 
     -- procedure Afficher: affiche un arbre
     -- paramètres: F_arbre: arbre à afficher
@@ -44,6 +44,10 @@ package P_Arbre is
     -- procedure Detruire: détruit un arbre
     -- paramètres: F_arbre: arbre à détruire
     procedure Detruire(F_arbre: in out Arbre);
+
+    -- TESTS
+
+    procedure Inserer(F_arbre: in out Arbre; F_valeur: in Integer);
     
 private
     type Noeud;
