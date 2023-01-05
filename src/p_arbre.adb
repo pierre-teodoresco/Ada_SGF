@@ -14,7 +14,7 @@ package body P_Arbre is
     -- paramètres: F_arbre: arbre à créer
     procedure Creer(F_arbre: out Arbre) is
     begin
-        F_arbre := null;
+        F_arbre := new Noeud'(Pere => null, Fils => null, Frere => null, Valeur => 0);
     end Creer;
 
     -- fonction Est_vide: teste si un arbre est vide
@@ -22,7 +22,7 @@ package body P_Arbre is
     -- résultat: vrai si l'arbre est vide, faux sinon
     function Est_vide(F_arbre: in Arbre) return Boolean is
     begin
-        return F_arbre = null;
+        return F_arbre.all.Fils = null;
     end Est_vide;
 
     -- fonction Pere: retourne le père d'un noeud
