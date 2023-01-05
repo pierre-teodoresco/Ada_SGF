@@ -1,5 +1,6 @@
 with Ada.Unchecked_Deallocation;
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
 
 package body P_Arbre is
 
@@ -19,9 +20,9 @@ package body P_Arbre is
     -- fonction Est_vide: teste si un arbre est vide
     -- paramètres: F_arbre: arbre à tester
     -- résultat: vrai si l'arbre est vide, faux sinon
-    function Est_vide(F_Arbre: in Arbre) return Boolean is
+    function Est_vide(F_arbre: in Arbre) return Boolean is
     begin
-        return F_Arbre = null;
+        return F_arbre = null;
     end Est_vide;
 
     -- fonction Pere: retourne le père d'un noeud
@@ -78,7 +79,17 @@ package body P_Arbre is
 
     -- procedure Afficher: affiche un arbre
     -- paramètres: F_arbre: arbre à afficher
-    procedure Afficher(F_arbre: in Arbre);
+    procedure Afficher(F_arbre: in Arbre) is
+    begin
+        if Est_vide(F_arbre) then
+            Put_Line("Arbre vide");
+        else
+            Put(F_arbre.all.Valeur, 4);
+            Afficher(F_arbre.all.Frere);
+            New_Line;
+            Afficher(F_arbre.all.Fils);
+        end if;
+    end Afficher;
 
     -- procedure Detruire: détruit un arbre
     -- paramètres: F_arbre: arbre à détruire
