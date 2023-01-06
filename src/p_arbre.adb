@@ -95,7 +95,7 @@ package body P_Arbre is
     procedure Detruire(F_arbre: in out Arbre) is
     begin
         if Est_vide(F_arbre) then
-            Liberer(F_arbre);
+            null;
         else
             Detruire(F_arbre.all.Fils);
             Detruire(F_arbre.all.Frere);
@@ -105,24 +105,10 @@ package body P_Arbre is
 
     -- TESTS
 
-    procedure Inserer(F_arbre: in out Arbre; F_valeur: in Integer) is
-        T_noeud: Arbre;
+    function Construct(F_valeur: in Integer) return Arbre is
     begin
-        if Est_vide(F_arbre) then
-            F_arbre := new Noeud'(Pere => null, Fils => null, Frere => null, Valeur => F_valeur);
-        elsif Est_vide(F_arbre.all.Fils) then
-            F_arbre.all.Fils := new Noeud'(Pere => F_arbre, Fils => null, Frere => null, Valeur => F_valeur);
-        else
-            -- On se place sur le dernier fils
-            T_noeud := F_arbre.all.Fils;
-            while T_noeud.all.Frere /= null loop
-                T_noeud := T_noeud.all.Frere;
-            end loop;
-
-            -- Ajout du fils
-            T_noeud.all.Frere := new Noeud'(Pere => F_arbre, Fils => null, Frere => null, Valeur => F_valeur);
-        end if;
-    end Inserer;
+        return new Noeud'(Pere => null, Fils => null, Frere => null, Valeur => F_valeur);
+    end Construct;
 
     -- PRIVATE
 
@@ -137,7 +123,7 @@ package body P_Arbre is
         T_fils := F_noeud.all.Fils;
         
         -- Valeur
-        Put("Valeur: ");
+        Put("Courrant: ");
         Put(F_noeud.all.Valeur, 0);
         New_Line;
 

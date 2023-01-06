@@ -46,8 +46,10 @@ package P_Arbre is
     procedure Detruire(F_arbre: in out Arbre);
 
     -- TESTS
-
-    procedure Inserer(F_arbre: in out Arbre; F_valeur: in Integer);
+    -- fonction Construct: crée un arbre avec une valeur
+    -- paramètres: F_valeur: valeur à mettre dans l'arbre
+    -- résultat: arbre avec la valeur
+    function Construct(F_valeur: in Integer) return Arbre;
     
 private
     type Noeud;
