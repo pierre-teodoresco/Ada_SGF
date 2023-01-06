@@ -40,8 +40,8 @@ begin
     Put_Line("--------------------");
 
     -- Suppression d'élément
-    Supprimer(D);
-    Supprimer(C);
+    Supprimer(B);
+    Supprimer(E);
 
     -- Affichage de l'arbre
     Afficher(A);
