@@ -41,6 +41,7 @@ begin
 
     -- Suppression d'élément
     Supprimer(D);
+    Supprimer(C);
 
     -- Affichage de l'arbre
     Afficher(A);
