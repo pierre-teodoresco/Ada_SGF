@@ -95,7 +95,7 @@ package body P_Arbre is
     procedure Detruire(F_arbre: in out Arbre) is
     begin
         if Est_vide(F_arbre) then
-            null;
+            Liberer(F_arbre);
         else
             Detruire(F_arbre.all.Fils);
             Detruire(F_arbre.all.Frere);
