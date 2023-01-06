@@ -77,15 +77,17 @@ package body P_Arbre is
     -- paramètres: F_noeud: noeud à supprimer
     --procedure Supprimer(F_noeud: in out Arbre);
 
-    -- procedure Afficher: affiche un arbre
-    -- paramètres: F_arbre: arbre à afficher
+    --  procedure Afficher: affiche un arbre
+    --  paramètres: F_arbre: arbre à afficher
     procedure Afficher(F_arbre: in Arbre) is
     begin
         if Est_vide(F_arbre) then
-            null;
+            New_Line;
         else
-            Put_Line(Integer'Image(F_arbre.all.Valeur));
+            Afficher_noeud(F_arbre);
+            New_Line;
             Afficher(F_arbre.all.Frere);
+            New_Line;
             Afficher(F_arbre.all.Fils);
         end if;
     end Afficher;
@@ -108,7 +110,9 @@ package body P_Arbre is
     procedure Inserer(F_arbre: in out Arbre; F_valeur: in Integer) is
         T_noeud: Arbre;
     begin
-        if Est_vide(F_arbre.all.Fils) then
+        if Est_vide(F_arbre) then
+            F_arbre := new Noeud'(Pere => null, Fils => null, Frere => null, Valeur => F_valeur);
+        elsif Est_vide(F_arbre.all.Fils) then
             F_arbre.all.Fils := new Noeud'(Pere => F_arbre, Fils => null, Frere => null, Valeur => F_valeur);
         else
             -- On se place sur le dernier fils
@@ -122,4 +126,38 @@ package body P_Arbre is
         end if;
     end Inserer;
 
+    -- PRIVATE
+
+    -- procedure Afficher_Noeud: affiche un noeud
+    -- paramètres: F_noeud: noeud à afficher
+    procedure Afficher_noeud(F_noeud: in Arbre) is
+        T_frere: Arbre;
+        T_fils: Arbre;
+    begin
+        -- iterative version
+        T_frere := F_noeud.all.Frere;
+        T_fils := F_noeud.all.Fils;
+        
+        -- Valeur
+        Put("Valeur: ");
+        Put(F_noeud.all.Valeur, 2);
+        New_Line;
+
+        -- Frere
+        Put("Frere: ");
+        while T_frere /= null loop
+            Put(T_frere.all.Valeur, 2);
+            T_frere := T_frere.all.Frere;
+        end loop;
+        New_Line;
+
+        -- Fils
+        Put("Fils: ");
+        while T_fils /= null loop
+            Put(T_fils.all.Valeur, 2);
+            T_fils := T_fils.all.Frere;
+        end loop;
+        New_Line;
+
+    end Afficher_noeud;
 end P_Arbre;

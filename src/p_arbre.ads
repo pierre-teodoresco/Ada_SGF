@@ -58,4 +58,8 @@ private
         Frere: Arbre;
         Valeur: Integer; -- val de tests
     end record;
+
+    -- procedure Afficher_Noeud: affiche un noeud
+    -- paramètres: F_noeud: noeud à afficher
+    procedure Afficher_noeud(F_noeud: in Arbre);
 end P_Arbre;
