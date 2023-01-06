@@ -82,12 +82,10 @@ package body P_Arbre is
     procedure Afficher(F_arbre: in Arbre) is
     begin
         if Est_vide(F_arbre) then
-            New_Line;
+            null;
         else
             Afficher_noeud(F_arbre);
-            New_Line;
             Afficher(F_arbre.all.Frere);
-            New_Line;
             Afficher(F_arbre.all.Fils);
         end if;
     end Afficher;
@@ -140,23 +138,43 @@ package body P_Arbre is
         
         -- Valeur
         Put("Valeur: ");
-        Put(F_noeud.all.Valeur, 2);
+        Put(F_noeud.all.Valeur, 0);
+        New_Line;
+
+        -- Pere
+        Put("Pere: ");
+        if F_noeud.all.Pere = null then
+            Put("null");
+        else
+            Put(F_noeud.all.Pere.all.Valeur, 2);
+        end if;
         New_Line;
 
         -- Frere
         Put("Frere: ");
-        while T_frere /= null loop
-            Put(T_frere.all.Valeur, 2);
-            T_frere := T_frere.all.Frere;
-        end loop;
+        if T_frere = null then
+            Put("null");
+        else
+            while T_frere /= null loop
+                Put(T_frere.all.Valeur, 2);
+                T_frere := T_frere.all.Frere;
+            end loop;
+        end if;
         New_Line;
 
         -- Fils
         Put("Fils: ");
-        while T_fils /= null loop
-            Put(T_fils.all.Valeur, 2);
-            T_fils := T_fils.all.Frere;
-        end loop;
+        if T_fils = null then
+            Put("null");
+        else
+            while T_fils /= null loop
+                Put(T_fils.all.Valeur, 2);
+                T_fils := T_fils.all.Frere;
+            end loop;
+        end if;
+        New_Line;
+
+        New_Line;
         New_Line;
 
     end Afficher_noeud;
