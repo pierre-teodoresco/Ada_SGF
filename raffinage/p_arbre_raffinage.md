@@ -118,3 +118,39 @@ R2: Comment A13?
 ```
     Liberer(F_noeud)
 ```
+
+#### Supprimer
+##### signature: procedure Supprimer(F_noeud: in out Arbre)
+R0: Supprimer un noeud
+R1: Comment R0?
+```
+    Si F_noeud = NULL Alors
+        Rien
+    Sinon
+A11     Verifier si F_noeud est un "fils direct" (pas un frère) ou non      in F_noeud
+A13     Supprimer les fils de F_noeud                                       in F_noeud
+A14     Supprimer F_noeud                                                   in F_noeud
+    Fin Si
+```
+R2: Comment A11?
+```
+    Si F_noeud^.Pere^.Fils = F_noeud Alors
+        F_noeud^.Pere^.Fils <- F_noeud^.Frere
+    Sinon
+        T_noeud <- F_noeud^.Pere^.Fils
+        TantQue T_noeud^.Frere /= F_noeud Faire
+            T_noeud <- T_noeud^.Frere
+        Fin TantQue
+        T_noeud^.Frere <- F_noeud^.Frere
+    Fin Si
+```
+R2: Comment A13?
+```
+    Detruire(F_noeud^.Fils)
+```
+R2: Comment A14?
+```
+    Liberer(F_noeud)
+```
+
+

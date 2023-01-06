@@ -75,7 +75,34 @@ package body P_Arbre is
 
     -- procedure Supprimer: supprime un noeud et ses fils
     -- paramètres: F_noeud: noeud à supprimer
-    --procedure Supprimer(F_noeud: in out Arbre);
+    procedure Supprimer(F_noeud: in out Arbre) is
+        T_noeud: Arbre;
+    begin
+        if Est_vide(F_noeud) then
+            null;
+        else
+            -- Verifier si F_noeud est un "fils direct" (pas un frère)
+            if F_noeud.all.Pere.all.Fils = F_noeud then
+                -- Suppression du lien paternel
+                F_noeud.all.Pere.all.Fils := F_noeud.all.Frere;
+            else
+                -- On se place sur le noeud précédent F_noeud
+                T_noeud := F_noeud.all.Pere.all.Fils;
+                while T_noeud.all.Frere /= F_noeud loop
+                    T_noeud := T_noeud.all.Frere;
+                end loop;
+
+                -- Suppression du lien fraternel
+                T_noeud.all.Frere := F_noeud.all.Frere;
+            end if;
+
+            -- Suppression des fils
+            Detruire(F_noeud.all.Fils);
+
+            -- Suppression du noeud
+            Liberer(F_noeud);
+        end if;
+    end Supprimer;
 
     --  procedure Afficher: affiche un arbre
     --  paramètres: F_arbre: arbre à afficher

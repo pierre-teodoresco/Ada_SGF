@@ -1,4 +1,5 @@
 with P_Arbre; use P_Arbre;
+with Ada.Text_IO; use Ada.Text_IO;
 
 procedure Test_P_Arbre is
     A: Arbre;
@@ -32,6 +33,14 @@ begin
     -- Insertion de valeurs sur le 3ème niveau
     Ajouter(D, Construct(1));
     Ajouter(D, Construct(8));
+
+    -- Affichage de l'arbre
+    Afficher(A);
+
+    Put_Line("--------------------");
+
+    -- Suppression d'élément
+    Supprimer(D);
 
     -- Affichage de l'arbre
     Afficher(A);
