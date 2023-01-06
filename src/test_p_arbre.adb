@@ -34,6 +34,8 @@ begin
     Ajouter(D, Construct(1));
     Ajouter(D, Construct(8));
 
+    Ajouter(E, Construct(9));
+
     -- Affichage de l'arbre
     Afficher(A);
 
@@ -42,6 +44,14 @@ begin
     -- Suppression d'élément
     Supprimer(B);
     Supprimer(E);
+
+    -- Affichage de l'arbre
+    Afficher(A);
+
+    Put_Line("--------------------");
+
+    -- Deplacer
+    Deplacer(D, C);
 
     -- Affichage de l'arbre
     Afficher(A);

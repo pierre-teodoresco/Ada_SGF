@@ -153,4 +153,13 @@ R2: Comment A14?
     Liberer(F_noeud)
 ```
 
+#### Deplacer
+##### signature: procedure Deplacer(F_noeud: in out Arbre, F_nouveau_pere: in out Arbre)
+R0: Déplacer un noeud
+R1: Comment R0?
+```
+    T_noeud <- F_noeud;
+    Ajouter(F_nouveau_pere, T_noeud)
+    Supprimer(F_noeud)
+```
 

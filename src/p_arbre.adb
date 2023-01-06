@@ -104,6 +104,19 @@ package body P_Arbre is
         end if;
     end Supprimer;
 
+    -- procedure Deplacer: déplace un noeud et ses fils
+    -- paramètres: F_noeud: noeud à déplacer
+    --             F_nouveau_pere: nouveau père du noeud
+    procedure Deplacer(F_noeud: in out Arbre; F_nouveau_pere: in out Arbre) is
+        T_noeud: Arbre := F_noeud;
+    begin
+        -- Suppression du noeud
+        Supprimer(F_noeud);
+
+        -- Ajout du noeud
+        Ajouter(F_nouveau_pere, T_noeud);
+    end Deplacer;
+
     --  procedure Afficher: affiche un arbre
     --  paramètres: F_arbre: arbre à afficher
     procedure Afficher(F_arbre: in Arbre) is
