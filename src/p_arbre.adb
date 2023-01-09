@@ -12,10 +12,10 @@ package body P_Arbre is
 
     -- procedure Creer: crée un arbre vide
     -- paramètres: F_arbre: arbre à créer
-    procedure Creer(F_arbre: out Arbre) is
-    begin
-        F_arbre := new Noeud'(Pere => null, Fils => null, Frere => null, Valeur => 0);
-    end Creer;
+    --  procedure Creer(F_arbre: out Arbre) is
+    --  begin
+    --      F_arbre := new Noeud'(Pere => null, Fils => null, Frere => null);
+    --  end Creer;
 
     -- fonction Est_vide: teste si un arbre est vide
     -- paramètres: F_arbre: arbre à tester
@@ -97,7 +97,7 @@ package body P_Arbre is
             end if;
 
             -- Suppression des fils
-            Detruire(F_noeud.all.Fils);
+            Detruire(F_arbre => F_noeud.all.Fils);
 
             -- Suppression du noeud
             Liberer(F_noeud);
@@ -108,9 +108,28 @@ package body P_Arbre is
     -- paramètres: F_noeud: noeud à déplacer
     --             F_nouveau_pere: nouveau père du noeud
     procedure Deplacer(F_noeud: in out Arbre; F_nouveau_pere: in out Arbre) is
-        T_noeud: Arbre := F_noeud;
+        Frere_prec: Arbre;
     begin
-        
+        -- Verifier si F_noeud est un fils direct
+        if F_noeud.all.Pere.all.Fils = F_noeud then
+            -- Modifier le fils du pere
+            F_noeud.all.Pere.all.Fils := F_noeud.all.Frere;
+        else
+            -- Modifier les freres
+            Frere_prec := F_noeud.all.Pere.all.Fils;
+            -- Trouver le frères précédents 
+            while Frere_prec.all.Frere /= F_noeud loop
+                Frere_prec := Frere_prec.all.Frere;
+            end loop;
+            -- Retirer F_noeud de la liste des frères
+            Frere_prec.all.Frere := F_noeud.all.Frere;
+        end if;
+
+        -- Retirer le frère de F_noeud
+        F_noeud.all.Frere := null;
+
+        -- Ajouter le noeud à son nouveau père
+        Ajouter(F_noeud => F_nouveau_pere, F_fils => F_noeud);
     end Deplacer;
 
     --  procedure Afficher: affiche un arbre
@@ -120,7 +139,7 @@ package body P_Arbre is
         if Est_vide(F_arbre) then
             null;
         else
-            Afficher_noeud(F_arbre);
+            Afficher_contenu(F_arbre.all.Contenu);
             Afficher(F_arbre.all.Frere);
             Afficher(F_arbre.all.Fils);
         end if;
@@ -141,63 +160,63 @@ package body P_Arbre is
 
     -- TESTS
 
-    function Construct(F_valeur: in Integer) return Arbre is
+    function Construct(F_valeur: in Type_Element) return Arbre is
     begin
-        return new Noeud'(Pere => null, Fils => null, Frere => null, Valeur => F_valeur);
+        return new Noeud'(Pere => null, Fils => null, Frere => null, Contenu => F_valeur);
     end Construct;
 
     -- PRIVATE
 
     -- procedure Afficher_Noeud: affiche un noeud
     -- paramètres: F_noeud: noeud à afficher
-    procedure Afficher_noeud(F_noeud: in Arbre) is
-        T_frere: Arbre;
-        T_fils: Arbre;
-    begin
-        -- iterative version
-        T_frere := F_noeud.all.Frere;
-        T_fils := F_noeud.all.Fils;
+    --  procedure Afficher_noeud(F_noeud: in Arbre) is
+    --      T_frere: Arbre;
+    --      T_fils: Arbre;
+    --  begin
+    --      -- iterative version
+    --      T_frere := F_noeud.all.Frere;
+    --      T_fils := F_noeud.all.Fils;
         
-        -- Valeur
-        Put("Courrant: ");
-        Put(F_noeud.all.Valeur, 0);
-        New_Line;
+    --      -- Valeur
+    --      Put("Courrant: ");
+    --      Put(F_noeud.all.Valeur, 0);
+    --      New_Line;
 
-        -- Pere
-        Put("Pere: ");
-        if F_noeud.all.Pere = null then
-            Put("null");
-        else
-            Put(F_noeud.all.Pere.all.Valeur, 2);
-        end if;
-        New_Line;
+    --      -- Pere
+    --      Put("Pere: ");
+    --      if F_noeud.all.Pere = null then
+    --          Put("null");
+    --      else
+    --          Put(F_noeud.all.Pere.all.Valeur, 2);
+    --      end if;
+    --      New_Line;
 
-        -- Frere
-        Put("Frere: ");
-        if T_frere = null then
-            Put("null");
-        else
-            while T_frere /= null loop
-                Put(T_frere.all.Valeur, 2);
-                T_frere := T_frere.all.Frere;
-            end loop;
-        end if;
-        New_Line;
+    --      -- Frere
+    --      Put("Frere: ");
+    --      if T_frere = null then
+    --          Put("null");
+    --      else
+    --          while T_frere /= null loop
+    --              Put(T_frere.all.Valeur, 2);
+    --              T_frere := T_frere.all.Frere;
+    --          end loop;
+    --      end if;
+    --      New_Line;
 
-        -- Fils
-        Put("Fils: ");
-        if T_fils = null then
-            Put("null");
-        else
-            while T_fils /= null loop
-                Put(T_fils.all.Valeur, 2);
-                T_fils := T_fils.all.Frere;
-            end loop;
-        end if;
-        New_Line;
+    --      -- Fils
+    --      Put("Fils: ");
+    --      if T_fils = null then
+    --          Put("null");
+    --      else
+    --          while T_fils /= null loop
+    --              Put(T_fils.all.Valeur, 2);
+    --              T_fils := T_fils.all.Frere;
+    --          end loop;
+    --      end if;
+    --      New_Line;
 
-        New_Line;
-        New_Line;
+    --      New_Line;
+    --      New_Line;
 
-    end Afficher_noeud;
+    --  end Afficher_noeud;
 end P_Arbre;

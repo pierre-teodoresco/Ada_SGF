@@ -1,3 +1,5 @@
+generic
+    type Type_Element is private;
 package P_Arbre is
     -- types
     type Arbre is private;
@@ -6,7 +8,7 @@ package P_Arbre is
 
     -- procedure Creer: crée un arbre vide
     -- paramètres: F_arbre: arbre à créer
-    procedure Creer(F_arbre: out Arbre);
+    --  procedure Creer(F_arbre: out Arbre);
     
     -- fonction Est_vide: teste si un arbre est vide
     -- paramètres: F_arbre: arbre à tester
@@ -44,6 +46,8 @@ package P_Arbre is
 
     -- procedure Afficher: affiche un arbre
     -- paramètres: F_arbre: arbre à afficher
+    generic
+        with procedure Afficher_contenu(F_contenu: in Type_Element);
     procedure Afficher(F_arbre: in Arbre);
 
     -- procedure Detruire: détruit un arbre
@@ -54,7 +58,7 @@ package P_Arbre is
     -- fonction Construct: crée un arbre avec une valeur
     -- paramètres: F_valeur: valeur à mettre dans l'arbre
     -- résultat: arbre avec la valeur
-    function Construct(F_valeur: in Integer) return Arbre;
+    function Construct(F_valeur: in Type_Element) return Arbre;
     
 private
     type Noeud;
@@ -63,10 +67,12 @@ private
         Pere: Arbre;
         Fils: Arbre;
         Frere: Arbre;
-        Valeur: Integer; -- val de tests
+        Contenu: Type_Element;
     end record;
 
     -- procedure Afficher_Noeud: affiche un noeud
     -- paramètres: F_noeud: noeud à afficher
-    procedure Afficher_noeud(F_noeud: in Arbre);
+    --  generic
+    --      with procedure Ecrire(F_Element: in Type_Element);
+    --  procedure Afficher_noeud(F_noeud: in Arbre);
 end P_Arbre;

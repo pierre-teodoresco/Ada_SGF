@@ -1,7 +1,22 @@
-with P_Arbre; use P_Arbre;
+with P_Arbre;
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
 
 procedure Test_P_Arbre is
+
+    -- instanciation de package générique
+    package Arbre_Entier is
+        new P_Arbre(Type_Element => Integer);
+    use Arbre_Entier;
+    
+    -- affichage générique
+    procedure Put_Int(F_i: Integer) is 
+    begin
+        Put(F_i, 2);
+    end Put_Int;
+
+    procedure Afficher_Entier is new Arbre_Entier.Afficher(Afficher_contenu => Put_Int);
+
     A: Arbre;
     B: Arbre;
     C: Arbre;
@@ -10,6 +25,8 @@ procedure Test_P_Arbre is
 begin
     -- Création de l'arbre (1er niveau)
     A := Construct(0);
+
+    Put_Line("Ajout de valeurs dans l'arbre :");
 
     -- Insertion de valeurs sur le 1er niveau
     Ajouter(A, Construct(5));
@@ -37,24 +54,27 @@ begin
     Ajouter(E, Construct(9));
 
     -- Affichage de l'arbre
-    Afficher(A);
+    Afficher_Entier(A);
 
+    New_Line;
     Put_Line("--------------------");
+    Put_Line("Suppression de valeurs dans l'arbre :");
 
-    -- Suppression d'élément
-    Supprimer(B);
+    --  Suppression d'élément
     Supprimer(E);
 
-    -- Affichage de l'arbre
-    Afficher(A);
+    --  Affichage de l'arbre
+    Afficher_Entier(A);
 
+    New_Line;
     Put_Line("--------------------");
+    Put_Line("Déplacement de valeurs dans l'arbre :");
 
     -- Deplacer
     Deplacer(D, C);
 
     -- Affichage de l'arbre
-    Afficher(A);
+    Afficher_Entier(A);
 
     -- Destruction de l'arbre
     Detruire(A);
