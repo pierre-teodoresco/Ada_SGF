@@ -7,9 +7,9 @@ package P_Arbre is
     -- Sous-programmes
 
     -- fonction Creer: crée un arbre
+    -- paramètres: T_element: type des éléments de l'arbre
     -- résultat: arbre créé
-    -- post-condition: l'arbre créé est vide
-    function Creer return Arbre with Post => Est_vide(Creer'Result); 
+    function Creer(T_element: in Type_Element) return Arbre; 
     
     -- fonction Est_vide: teste si un arbre est vide
     -- paramètres: F_arbre: arbre à tester

@@ -24,7 +24,7 @@ procedure Test_P_Arbre is
     E: Arbre;
 begin
     -- Création de l'arbre (1er niveau)
-    A := Creer;
+    A := Creer(0);
 
     Put_Line("Ajout de valeurs dans l'arbre :");
 

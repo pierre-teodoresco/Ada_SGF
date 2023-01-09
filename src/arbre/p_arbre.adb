@@ -11,11 +11,11 @@ package body P_Arbre is
     -- implémentation des sous-programmes de P_Arbre
 
     -- fonction Creer: crée un arbre
+    -- paramètres: T_element: élément à mettre dans la racine de l'arbre
     -- résultat: arbre créé
-    -- post-condition: l'arbre créé est vide
-    function Creer() return Arbre is
+    function Creer(T_element: in Type_Element) return Arbre is
     begin
-        return null;
+        return new Noeud'(Pere => null, Fils => null, Frere => null, Contenu => T_element);
     end Creer;
 
     -- fonction Est_vide: teste si un arbre est vide
