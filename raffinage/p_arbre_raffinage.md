@@ -158,8 +158,39 @@ R2: Comment A14?
 R0: Déplacer un noeud
 R1: Comment R0?
 ```
-    T_noeud <- F_noeud;
-    Ajouter(F_nouveau_pere, T_noeud)
-    Supprimer(F_noeud)
+A11 Si F_noeud est un fils direct Alors
+A12     Modifier le fils du père                in F_noeud
+    Sinon
+A13     Modifier les frères                     in F_noeud
+    FinSi
+A14 Ajouter F_noeud en fils du nouveau père     in out F_noeud, in F_nouveau_pere
+```
+R2: Comment A11?
+```
+F_noeud^.Pere.Fils = F_noeud Alors
+```
+R2: Comment A12?
+```
+    F_noeud^.Pere^.Fils <- F_noeud^.Frere
+```
+R2: Comment A13?
+```
+    Frere_prec <- F_noeud^.Pere^.Fils
+A21 Trouver le Frere précédents             in out Frere_prec, in F_noeud
+A22 Sortir F_noeud de la liste des Frères   in out Frere_prec, in F_noeud
+```
+R3: Comment A21?
+```
+TantQue Frere_prec^.Frere = F_noeud Faire
+    Frere_prec <- Frere_prec^.Frere
+FinTQ
+```
+R3: Comment A22?
+```
+Frere_prec^.Frere <- F_noeud^.Frere
+```
+R2: Comment A14?
+```
+Ajouter(F_noeud, F_nouveau_pere)
 ```
 

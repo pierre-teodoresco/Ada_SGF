@@ -110,11 +110,7 @@ package body P_Arbre is
     procedure Deplacer(F_noeud: in out Arbre; F_nouveau_pere: in out Arbre) is
         T_noeud: Arbre := F_noeud;
     begin
-        -- Suppression du noeud
-        Supprimer(F_noeud);
-
-        -- Ajout du noeud
-        Ajouter(F_nouveau_pere, T_noeud);
+        
     end Deplacer;
 
     --  procedure Afficher: affiche un arbre
