@@ -6,9 +6,10 @@ package P_Arbre is
 
     -- Sous-programmes
 
-    -- procedure Creer: crée un arbre vide
-    -- paramètres: F_arbre: arbre à créer
-    --  procedure Creer(F_arbre: out Arbre);
+    -- fonction Creer: crée un arbre
+    -- résultat: arbre créé
+    -- post-condition: l'arbre créé est vide
+    function Creer return Arbre with Post => Est_vide(Creer'Result); 
     
     -- fonction Est_vide: teste si un arbre est vide
     -- paramètres: F_arbre: arbre à tester
@@ -32,8 +33,8 @@ package P_Arbre is
 
     -- procedure Ajouter: ajoute un fils à la fin de la liste des fils d'un noeud
     -- paramètres: F_noeud: noeud auquel on veut ajouter un fils
-    --             F_fils: fils à ajouter
-    procedure Ajouter(F_noeud: in out Arbre; F_fils: in Arbre);
+    --             F_element: element à ajouter 
+    procedure Ajouter(F_noeud: in out Arbre; F_element: in Type_Element);
 
     -- procedure Supprimer: supprime un noeud et ses fils
     -- paramètres: F_noeud: noeud à supprimer
@@ -53,12 +54,6 @@ package P_Arbre is
     -- procedure Detruire: détruit un arbre
     -- paramètres: F_arbre: arbre à détruire
     procedure Detruire(F_arbre: in out Arbre);
-
-    -- TESTS
-    -- fonction Construct: crée un arbre avec une valeur
-    -- paramètres: F_valeur: valeur à mettre dans l'arbre
-    -- résultat: arbre avec la valeur
-    function Construct(F_valeur: in Type_Element) return Arbre;
     
 private
     type Noeud;

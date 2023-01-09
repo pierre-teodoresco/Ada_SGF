@@ -24,34 +24,34 @@ procedure Test_P_Arbre is
     E: Arbre;
 begin
     -- Création de l'arbre (1er niveau)
-    A := Construct(0);
+    A := Creer;
 
     Put_Line("Ajout de valeurs dans l'arbre :");
 
     -- Insertion de valeurs sur le 1er niveau
-    Ajouter(A, Construct(5));
-    Ajouter(A, Construct(3));
+    Ajouter(A, 5);
+    Ajouter(A, 3);
     
     -- 2ème niveau
     B := Fils(A);
     C := Frere(B);
 
     -- Insertion de valeurs sur le 2ème niveau
-    Ajouter(B, Construct(2));
-    Ajouter(B, Construct(4));
+    Ajouter(B, 2);
+    Ajouter(B, 4);
 
-    Ajouter(C, Construct(6));
-    Ajouter(C, Construct(7));
+    Ajouter(C, 6);
+    Ajouter(C, 7);
 
     -- 3ème niveau
     D := Fils(B);
     E := Fils(C);
 
     -- Insertion de valeurs sur le 3ème niveau
-    Ajouter(D, Construct(1));
-    Ajouter(D, Construct(8));
+    Ajouter(D, 1);
+    Ajouter(D, 8);
 
-    Ajouter(E, Construct(9));
+    Ajouter(E, 9);
 
     -- Affichage de l'arbre
     Afficher_Entier(A);

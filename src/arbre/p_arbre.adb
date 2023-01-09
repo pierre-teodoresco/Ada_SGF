@@ -10,12 +10,13 @@ package body P_Arbre is
 
     -- implémentation des sous-programmes de P_Arbre
 
-    -- procedure Creer: crée un arbre vide
-    -- paramètres: F_arbre: arbre à créer
-    --  procedure Creer(F_arbre: out Arbre) is
-    --  begin
-    --      F_arbre := new Noeud'(Pere => null, Fils => null, Frere => null);
-    --  end Creer;
+    -- fonction Creer: crée un arbre
+    -- résultat: arbre créé
+    -- post-condition: l'arbre créé est vide
+    function Creer() return Arbre is
+    begin
+        return null;
+    end Creer;
 
     -- fonction Est_vide: teste si un arbre est vide
     -- paramètres: F_arbre: arbre à tester
@@ -51,13 +52,13 @@ package body P_Arbre is
 
     -- procedure Ajouter: ajoute un fils à la fin de la liste des fils d'un noeud
     -- paramètres: F_noeud: noeud auquel on veut ajouter un fils
-    --             F_fils: fils à ajouter
-    procedure Ajouter(F_noeud: in out Arbre; F_fils: in Arbre) is
+    --             F_element: element à ajouter
+    procedure Ajouter(F_noeud: in out Arbre; F_element: in Type_Element) is
         T_noeud: Arbre;
     begin
         if F_noeud.all.Fils = null then
             -- Premier fils
-            F_noeud.all.Fils := F_fils;
+            F_noeud.all.Fils := new Noeud'(Pere => F_noeud, Fils => null, Frere => null, Contenu => F_element);
         else
             -- On se place sur le dernier fils
             T_noeud := F_noeud.all.Fils;
@@ -66,11 +67,8 @@ package body P_Arbre is
             end loop;
 
             -- Ajout du fils
-            T_noeud.all.Frere := F_fils;
+            T_noeud.all.Frere := new Noeud'(Pere => F_noeud, Fils => null, Frere => null, Contenu => F_element);
         end if;
-
-        -- Mis à jour du père du fils
-        F_fils.all.Pere := F_noeud;
     end Ajouter;
 
     -- procedure Supprimer: supprime un noeud et ses fils
@@ -109,6 +107,7 @@ package body P_Arbre is
     --             F_nouveau_pere: nouveau père du noeud
     procedure Deplacer(F_noeud: in out Arbre; F_nouveau_pere: in out Arbre) is
         Frere_prec: Arbre;
+        T_noeud: Arbre;
     begin
         -- Verifier si F_noeud est un fils direct
         if F_noeud.all.Pere.all.Fils = F_noeud then
@@ -128,8 +127,19 @@ package body P_Arbre is
         -- Retirer le frère de F_noeud
         F_noeud.all.Frere := null;
 
-        -- Ajouter le noeud à son nouveau père
-        Ajouter(F_noeud => F_nouveau_pere, F_fils => F_noeud);
+        -- Mettre à F_nouveau pere, F_noeud comme fils
+        if F_nouveau_pere.all.Fils /= null then
+            T_noeud := F_nouveau_pere.all.Fils;
+            while T_noeud.all.Frere /= null loop
+                T_noeud := T_noeud.all.Frere;
+            end loop;
+            T_noeud.all.Frere := F_noeud;
+        else
+            F_nouveau_pere.all.Fils := F_noeud;
+        end if;
+
+        -- Modifier le pere de F_noeud
+        F_noeud.all.Pere := F_nouveau_pere;
     end Deplacer;
 
     --  procedure Afficher: affiche un arbre
@@ -157,13 +167,6 @@ package body P_Arbre is
             Liberer(F_arbre);
         end if;
     end Detruire;
-
-    -- TESTS
-
-    function Construct(F_valeur: in Type_Element) return Arbre is
-    begin
-        return new Noeud'(Pere => null, Fils => null, Frere => null, Contenu => F_valeur);
-    end Construct;
 
     -- PRIVATE
 
