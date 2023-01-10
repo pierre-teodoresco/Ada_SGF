@@ -95,7 +95,7 @@ package body P_Arbre is
             end if;
 
             -- Suppression des fils
-            Detruire(F_arbre => F_noeud.all.Fils);
+            Detruire(F_noeud.all.Fils);
 
             -- Suppression du noeud
             Liberer(F_noeud);
@@ -167,59 +167,4 @@ package body P_Arbre is
             Liberer(F_arbre);
         end if;
     end Detruire;
-
-    -- PRIVATE
-
-    -- procedure Afficher_Noeud: affiche un noeud
-    -- paramètres: F_noeud: noeud à afficher
-    --  procedure Afficher_noeud(F_noeud: in Arbre) is
-    --      T_frere: Arbre;
-    --      T_fils: Arbre;
-    --  begin
-    --      -- iterative version
-    --      T_frere := F_noeud.all.Frere;
-    --      T_fils := F_noeud.all.Fils;
-        
-    --      -- Valeur
-    --      Put("Courrant: ");
-    --      Put(F_noeud.all.Valeur, 0);
-    --      New_Line;
-
-    --      -- Pere
-    --      Put("Pere: ");
-    --      if F_noeud.all.Pere = null then
-    --          Put("null");
-    --      else
-    --          Put(F_noeud.all.Pere.all.Valeur, 2);
-    --      end if;
-    --      New_Line;
-
-    --      -- Frere
-    --      Put("Frere: ");
-    --      if T_frere = null then
-    --          Put("null");
-    --      else
-    --          while T_frere /= null loop
-    --              Put(T_frere.all.Valeur, 2);
-    --              T_frere := T_frere.all.Frere;
-    --          end loop;
-    --      end if;
-    --      New_Line;
-
-    --      -- Fils
-    --      Put("Fils: ");
-    --      if T_fils = null then
-    --          Put("null");
-    --      else
-    --          while T_fils /= null loop
-    --              Put(T_fils.all.Valeur, 2);
-    --              T_fils := T_fils.all.Frere;
-    --          end loop;
-    --      end if;
-    --      New_Line;
-
-    --      New_Line;
-    --      New_Line;
-
-    --  end Afficher_noeud;
 end P_Arbre;

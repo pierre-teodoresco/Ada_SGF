@@ -64,10 +64,4 @@ private
         Frere: Arbre;
         Contenu: Type_Element;
     end record;
-
-    -- procedure Afficher_Noeud: affiche un noeud
-    -- paramètres: F_noeud: noeud à afficher
-    --  generic
-    --      with procedure Ecrire(F_Element: in Type_Element);
-    --  procedure Afficher_noeud(F_noeud: in Arbre);
 end P_Arbre;
