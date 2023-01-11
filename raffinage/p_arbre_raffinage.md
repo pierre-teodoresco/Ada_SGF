@@ -257,5 +257,6 @@ A21     Rechercher dans les fils de F_noeud et dans les frères de F_noeud
 
 R3: Comment A21?
 ```
-    Retourner Rechercher(F_noeud^.Fils, F_valeur) OU Rechercher(F_noeud^.Frere, F_valeur)
+    Rechercher(F_noeud^.Fils, F_valeur)
+    Rechercher(F_noeud^.Frere, F_valeur)
 ```

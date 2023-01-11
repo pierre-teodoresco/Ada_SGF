@@ -45,14 +45,6 @@ package P_Arbre is
     --             F_nouveau_pere: nouveau père du noeud
     procedure Deplacer(F_noeud: in out Arbre; F_nouveau_pere: in out Arbre);
 
-    -- fonction Rechercher: recherche un élément dans un arbre
-    -- paramètres: F_arbre: arbre dans lequel on recherche
-    --             F_element: élément à rechercher
-    -- résultat: noeud contenant l'élément recherché, ou noeud vide si l'élément n'est pas trouvé
-    generic
-        with function Egal(F_element1: in Type_Element; F_element2: in Type_Element) return Boolean;
-    function Rechercher(F_arbre: in Arbre; F_element: in Type_Element) return Arbre;
-
     -- procedure Afficher: affiche un arbre
     -- paramètres: F_arbre: arbre à afficher
     generic

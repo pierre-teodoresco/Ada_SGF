@@ -2,7 +2,7 @@ with P_Arbre;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
 
-procedure Test_P_Arbre is
+procedure Test_Arbre is
 
     -- instanciation de package générique
     package Arbre_Entier is
@@ -79,4 +79,4 @@ begin
     -- Destruction de l'arbre
     Detruire(A);
 
-end Test_P_Arbre;
+end Test_Arbre;

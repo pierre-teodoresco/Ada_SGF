@@ -142,23 +142,6 @@ package body P_Arbre is
         F_noeud.all.Pere := F_nouveau_pere;
     end Deplacer;
 
-    -- fonction Rechercher: recherche un élément dans un arbre
-    -- paramètres: F_arbre: arbre dans lequel on recherche
-    --             F_element: élément à rechercher
-    -- résultat: noeud contenant l'élément recherché, ou noeud vide si l'élément n'est pas trouvé
-    function Rechercher(F_arbre: in Arbre; F_element: in Type_Element) return Arbre is
-    begin
-        if Est_vide(F_arbre) then
-            return null;
-        else
-            if Egal(F_arbre.all.Contenu, F_element) then
-                return F_arbre;
-            else
-                return Rechercher(F_arbre.all.Fils, F_element) or Rechercher(F_arbre.all.Frere, F_element);
-            end if;
-        end if;
-    end Rechercher;
-
     --  procedure Afficher: affiche un arbre
     --  paramètres: F_arbre: arbre à afficher
     procedure Afficher(F_arbre: in Arbre) is
