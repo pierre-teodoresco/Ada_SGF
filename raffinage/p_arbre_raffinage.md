@@ -1,7 +1,7 @@
 # Raffinage des sous-programmes du package P_Arbre
 
 #### Ajouter
-##### signature: procedure Ajouter(F_noeud: in out Arbre; F_element: in Type_Elements)
+##### signature: procedure Ajouter(F_noeud: in out Arbre; F_element: in Type_Element)
 R0: Ajouter un noeud dans un arbre en paramètre
 R1: Comment R0?
 ```
@@ -234,3 +234,28 @@ R2: Comment A16?
 F_noeud^.Pere <- F_nouveau_pere
 ```
 
+#### Rechercher
+
+##### signature: procedure Rechercher(F_noeud: in Arbre, F_valeur: in Type_Element)
+R0: Rechercher un noeud, retourne le noeud trouvé ou null sinon
+R1: Comment R0?
+```
+    Si Est_vide(F_noeud) then
+        Retourner NULL
+    Sinon
+A11     Rechercher le noeud
+    FinSi
+```
+
+R2: Comment A11?
+    Si Egal(F_noeud^.Valeur, F_valeur) = Vrai Alors
+        Retourner F_noeud
+    Sinon
+A21     Rechercher dans les fils de F_noeud et dans les frères de F_noeud
+    Fin Si
+```
+
+R3: Comment A21?
+```
+    Retourner Rechercher(F_noeud^.Fils, F_valeur) OU Rechercher(F_noeud^.Frere, F_valeur)
+```
