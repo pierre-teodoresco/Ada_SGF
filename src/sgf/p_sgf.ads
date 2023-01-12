@@ -4,6 +4,8 @@ with P_Arbre;
 
 package P_SGF is 
     -- types
+    type DF_Flag is (Dossier, Fichier);
+
     type SGF is private;
 
     type Commandes is (pwd, touch, mkdir, ls, cd, rm, cp, mv, tar);
@@ -26,12 +28,16 @@ package P_SGF is
     -- params: F_Cmd: in Commande - commande à exécuter
     procedure Lancer(F_Cmd: in Commande);
 
+    -- TESTS
+
     procedure Display(F_sgf: in SGF);
+
+    procedure Add_File(F_sgf: in out SGF; F_nom: in Unbounded_String; F_flag: in DF_Flag; F_perm: in Natural; F_taille: in Natural);
 
 private
 
     -- types
-    type DF_Flag is (Dossier, Fichier);
+    --  type DF_Flag is (Dossier, Fichier);
     type DF is record
         Nom: Unbounded_String;
         Flag: DF_Flag;
@@ -87,4 +93,12 @@ private
     -- params: F_Arbre: in out Arbre
     --         F_nouvelle_taille
     procedure Archiver(F_Arbre: in out Arbre; F_Element: in Arbre);
+
+    -- procedure Creer_DF: creer un DF
+    -- params: F_nom: in Unbounded_String
+    --         F_flag: in DF_Flag
+    --         F_perm: in Natural
+    --         F_taille: in Natural
+    -- return: DF
+    function Creer_DF(F_nom: in Unbounded_String; F_flag: in DF_Flag; F_perm: in Natural; F_taille: in Natural) return DF;
 end P_SGF;

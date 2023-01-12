@@ -12,10 +12,12 @@ package body P_SGF is
         Racine: SGF;
     begin
         -- Création de la racine du SGF
-        Racine_DF.Nom := To_Unbounded_String("/");
-        Racine_DF.Flag := Dossier;
-        Racine_DF.Perm := 777;
-        Racine_DF.Taille := 0;
+        --  Racine_DF.Nom := To_Unbounded_String("/");
+        --  Racine_DF.Flag := Dossier;
+        --  Racine_DF.Perm := 777;
+        --  Racine_DF.Taille := 0;
+
+        Racine_DF := Creer_DF(To_Unbounded_String("/"), Dossier, 777, 0);
 
         -- Création de l'arbre de la racine
         Arbre_Racine := Arbre_DF.Creer(Racine_DF);
@@ -35,10 +37,18 @@ package body P_SGF is
         null;
     end Lancer;
 
+    -- TESTS
+
     procedure Display(F_sgf: in SGF) is
     begin
         Afficher_Arbre_SGF(F_sgf.Racine);
     end Display;
+
+    procedure Add_File(F_sgf: in out SGF; F_nom: in Unbounded_String; F_flag: in DF_Flag; F_perm: in Natural; F_taille: in Natural) is
+    begin
+        Arbre_DF.Ajouter(F_sgf.Courrant, Creer_DF(F_nom, F_flag, F_perm, F_taille));
+    end Add_File;
+
 
     -- PRIVATE
 
@@ -109,5 +119,16 @@ package body P_SGF is
     begin
         null;
     end Archiver;
+
+    -- procedure Creer_DF: creer un DF
+    -- params: F_nom: in Unbounded_String
+    --         F_flag: in DF_Flag
+    --         F_perm: in Natural
+    --         F_taille: in Natural
+    -- return: DF
+    function Creer_DF(F_nom: in Unbounded_String; F_flag: in DF_Flag; F_perm: in Natural; F_taille: in Natural) return DF is
+    begin
+        return DF'(Nom => F_nom, Flag => F_flag, Perm => F_perm, Taille => F_taille);
+    end Creer_DF;
 
 end P_SGF;
