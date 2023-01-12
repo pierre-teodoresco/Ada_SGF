@@ -4,4 +4,5 @@ procedure Test_SGF is
     System: SGF;
 begin
     System := Creer;
+    Display(System);
 end Test_SGF;

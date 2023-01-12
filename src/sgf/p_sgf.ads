@@ -26,13 +26,15 @@ package P_SGF is
     -- params: F_Cmd: in Commande - commande à exécuter
     procedure Lancer(F_Cmd: in Commande);
 
+    procedure Display(F_sgf: in SGF);
+
 private
 
     -- types
-    type DF_Spec is (Dossier, Fichier);
+    type DF_Flag is (Dossier, Fichier);
     type DF is record
         Nom: Unbounded_String;
-        Spec: DF_Spec;
+        Flag: DF_Flag;
         Perm: Natural;
         Taille: Natural;
     end record;
@@ -44,45 +46,45 @@ private
     type SGF is record
         Racine: Arbre;
         Courrant: Arbre;
-        Formats: String;
+        Format: Unbounded_String;
     end record;
 
     procedure Afficher_DF(F_df: in DF);
 
-    procedure Afficher_SGF is new Arbre_DF.Afficher(Afficher_Contenu => Afficher_DF);
+    procedure Afficher_Arbre_SGF is new Arbre_DF.Afficher(Afficher_Contenu => Afficher_DF);
 
     -- Sous-programmes
 
-    --  -- procedure Creer_dossier : crée un dossier dans le SGF
-    --  -- params: F_Arbre: in out Arbre
-    --  --         F_Nom: in Unbounded_String
-    --  --         F_Perm: in DF_Perm
+    -- procedure Creer_dossier : crée un dossier dans le SGF
+    -- params: F_Arbre: in out Arbre
+    --         F_Nom: in Unbounded_String
+    --         F_Perm: in DF_Perm
     procedure Creer_dossier(F_Arbre: in out Arbre_DF.Arbre; F_Nom: in Unbounded_String; F_Perm: in Natural);
     
-    --  -- procedure Creer_fichier : crée un fichier dans le SGF
-    --  -- params: F_Arbre: in out Arbre
-    --  --         F_Nom: in Unbounded_String
-    --  --         F_Perm: in DF_Perm
-    --  --         F_Taille: in Integer
+    -- procedure Creer_fichier : crée un fichier dans le SGF
+    -- params: F_Arbre: in out Arbre
+    --         F_Nom: in Unbounded_String
+    --         F_Perm: in DF_Perm
+    --         F_Taille: in Integer
     procedure Creer_fichier(F_Arbre: in out Arbre; F_Nom: in Unbounded_String; F_Perm: in Natural; F_Taille: in Natural);
 
-    --  -- procedure Afficher : affiche l'architecture du SGF
-    --  -- params: F_Arbre: in Arbre
-    procedure Afficher(F_Arbre: in Arbre);
+    -- procedure Afficher : affiche l'architecture du SGF
+    -- params: F_Arbre: in Arbre
+    procedure Afficher(F_sgf: in SGF);
 
-    --  -- procedure Supprimer : supprime un élément du SGF
-    --  -- params: F_Arbre: in out Arbre
-    --  --         F_Element: in Arbre
+    -- procedure Supprimer : supprime un élément du SGF
+    -- params: F_Arbre: in out Arbre
+    --         F_Element: in Arbre
     procedure Supprimer(F_Arbre: in out Arbre; F_Element: in Arbre);
     
-    --  -- procedure Deplacer : déplace un élément du SGF
-    --  -- params: F_Arbre: in out Arbre
-    --  --         F_Element: in Arbre
-    --  --         F_Parent: in Arbre
+    -- procedure Deplacer : déplace un élément du SGF
+    -- params: F_Arbre: in out Arbre
+    --         F_Element: in Arbre
+    --         F_Parent: in Arbre
     procedure Deplacer(F_Arbre: in out Arbre; F_Element: in Arbre; F_Parent: in Arbre);
 
-    --  -- procedure Archiver : archive un élément du SGF
-    --  -- params: F_Arbre: in out Arbre
-    --  --         F_nouvelle_taille
+    -- procedure Archiver : archive un élément du SGF
+    -- params: F_Arbre: in out Arbre
+    --         F_nouvelle_taille
     procedure Archiver(F_Arbre: in out Arbre; F_Element: in Arbre);
 end P_SGF;
