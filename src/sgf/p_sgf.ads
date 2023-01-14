@@ -9,8 +9,14 @@ package P_SGF is
     type SGF is private;
 
     type Commandes is (pwd, touch, mkdir, ls, cd, rm, cp, mv, tar);
-    type Options is (r);
-    type Liste_String is access Unbounded_String;
+    type Options is (none, r, l);
+
+    type String_Node;
+    type Liste_String is access String_Node;
+    type String_Node is record
+        Valeur: Unbounded_String;
+        Suivant: Liste_String;
+    end record;
 
     type Commande is record
         Nom: Commandes;
@@ -59,21 +65,23 @@ private
     -- Sous-programmes
 
     -- procedure Creer_dossier : crée un dossier dans le SGF
-    -- params: F_Arbre: in out Arbre
+    -- params: F_sgf: in out SGF
     --         F_Nom: in Unbounded_String
-    --         F_Perm: in DF_Perm
-    procedure Creer_dossier(F_Arbre: in out Arbre_DF.Arbre; F_Nom: in Unbounded_String; F_Perm: in Natural);
+    --         F_Perm: in Natural
+    procedure Creer_dossier(F_sgf: in out SGF; F_Nom: in Unbounded_String; F_Perm: in Natural);
     
     -- procedure Creer_fichier : crée un fichier dans le SGF
-    -- params: F_Arbre: in out Arbre
+    -- params: F_sgf: in out SGF
     --         F_Nom: in Unbounded_String
-    --         F_Perm: in DF_Perm
-    --         F_Taille: in Integer
-    procedure Creer_fichier(F_Arbre: in out Arbre; F_Nom: in Unbounded_String; F_Perm: in Natural; F_Taille: in Natural);
+    procedure Creer_fichier(F_sgf: in out SGF; F_Nom: in Unbounded_String);
 
     -- procedure Afficher : affiche l'architecture du SGF
     -- params: F_Arbre: in Arbre
     procedure Afficher(F_sgf: in SGF);
+
+    -- procedure Afficher_complet : affiche l'architecture du SGF avec les détails
+    -- params: F_sgf: in SGF
+    procedure Afficher_complet(F_sgf: in SGF);
 
     -- procedure Supprimer : supprime un élément du SGF
     -- params: F_Arbre: in out Arbre

@@ -31,13 +31,16 @@ package body P_SGF is
                 -- TODO : afficher le chemin du dossier courant
                 null;
             when touch =>
-                -- TODO : créer un fichier
-                null;
+                Creer_fichier(F_sgf, F_cmd.Args.all.Valeur);
             when mkdir =>
                 -- TODO : créer un dossier
                 null;
             when ls =>
-                Afficher(F_sgf);
+                case F_cmd.Option is
+                    when none => Afficher(F_sgf);
+                    when l => Afficher_complet(F_sgf);
+                    when others => null;
+                end case;
             when cd =>
                 -- TODO : changer de dossier courant
                 null;
@@ -81,32 +84,38 @@ package body P_SGF is
     -- Sous-programmes
 
     -- procedure Creer_dossier : crée un dossier dans le SGF
-    -- params: F_Arbre: in out Arbre
+    -- params: F_sgf: in out SGF
     --         F_Nom: in Unbounded_String
-    --         F_Perm: in DF_Perm
-    procedure Creer_dossier(F_Arbre: in out Arbre_DF.Arbre; F_Nom: in Unbounded_String; F_Perm: in Natural) is
+    --         F_Perm: in Natural
+    procedure Creer_dossier(F_sgf: in out SGF; F_Nom: in Unbounded_String; F_Perm: in Natural) is
     begin
-        -- TODO : créer un DF
+        -- TODO : créer un dossier
         null;
     end Creer_dossier;
     
     -- procedure Creer_fichier : crée un fichier dans le SGF
-    -- params: F_Arbre: in out Arbre
+    -- params: F_sgf: in out SGF
     --         F_Nom: in Unbounded_String
-    --         F_Perm: in DF_Perm
-    --         F_Taille: in Integer
-    procedure Creer_fichier(F_Arbre: in out Arbre; F_Nom: in Unbounded_String; F_Perm: in Natural; F_Taille: in Natural) is
+    --         F_Perm: in Natural
+    --         F_Taille: in Natural
+    procedure Creer_fichier(F_sgf: in out SGF; F_Nom: in Unbounded_String) is
     begin
-        -- TODO : créer un DF
-        null;
+        Arbre_DF.Ajouter(F_sgf.Courrant, DF'(Nom => F_Nom, Flag => Fichier, Perm => 777, Taille => 0));
     end Creer_fichier;
 
     -- procedure Afficher : affiche l'architecture du SGF
     -- params: F_Arbre: in Arbre
     procedure Afficher(F_sgf: in SGF) is
     begin
-        Afficher_Arbre_SGF_simple(F_sgf.Courrant);
+        Afficher_Arbre_SGF_simple(Fils(F_sgf.Courrant));
     end Afficher;
+
+    -- procedure Afficher_complet : affiche l'architecture du SGF avec les détails
+    -- params: F_sgf: in SGF
+    procedure Afficher_complet(F_sgf: in SGF) is
+    begin
+        Afficher_Arbre_SGF_complet(F_sgf.Courrant);
+    end Afficher_complet;
 
     -- procedure Supprimer : supprime un élément du SGF
     -- params: F_Arbre: in out Arbre

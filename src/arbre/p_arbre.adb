@@ -151,7 +151,6 @@ package body P_Arbre is
         else
             Afficher_contenu(F_arbre.all.Contenu);
             Afficher(F_arbre.all.Frere);
-            Afficher(F_arbre.all.Fils);
         end if;
     end Afficher;
 
