@@ -9,51 +9,57 @@ package body P_SGF is
     function Creer return SGF is
         Racine_DF: DF;
         Arbre_Racine: Arbre;
-        Racine: SGF;
     begin
-        -- Création de la racine du SGF
-        --  Racine_DF.Nom := To_Unbounded_String("/");
-        --  Racine_DF.Flag := Dossier;
-        --  Racine_DF.Perm := 777;
-        --  Racine_DF.Taille := 0;
-
-        Racine_DF := Creer_DF(To_Unbounded_String("/"), Dossier, 777, 0);
+        -- Création du DF de la racine
+        Racine_DF := DF'(Nom => To_Unbounded_String("/"), Flag => Dossier, Perm => 777, Taille => 0);
 
         -- Création de l'arbre de la racine
         Arbre_Racine := Arbre_DF.Creer(Racine_DF);
 
         -- Création du SGF
-        Racine.Racine := Arbre_Racine;
-        Racine.Courrant := Arbre_Racine;
-        Racine.Format:= To_Unbounded_String("FAT32");
-
-        return Racine;
+        return SGF'(Racine => Arbre_Racine, Courrant => Arbre_Racine, Format => To_Unbounded_String("ext4"));
     end Creer;
 
     -- procedure Lancer : exécute la commande
     -- params: F_Cmd: in Commande - commande à exécuter
-    procedure Lancer(F_Cmd: in Commande) is
+    --        F_sgf: in SGF - SGF sur lequel exécuter la commande
+    procedure Lancer(F_sgf: in out SGF; F_Cmd: in Commande) is
     begin
-        null;
+        -- Agir en fonction de la commande
+        case F_Cmd.Nom is
+            when pwd =>
+                -- TODO : afficher le chemin du dossier courant
+                null;
+            when touch =>
+                -- TODO : créer un fichier
+                null;
+            when mkdir =>
+                -- TODO : créer un dossier
+                null;
+            when ls =>
+                Afficher(F_sgf);
+            when cd =>
+                -- TODO : changer de dossier courant
+                null;
+            when rm => 
+                -- TODO : supprimer un élément
+                null;
+            when cp =>
+                -- TODO : copier un élément
+                null;
+            when mv =>
+                -- TODO : déplacer un élément
+                null;
+            when tar =>
+                -- TODO : archiver un élément
+                null;
+        end case;
     end Lancer;
-
-    -- TESTS
-
-    procedure Display(F_sgf: in SGF) is
-    begin
-        Afficher_Arbre_SGF(F_sgf.Racine);
-    end Display;
-
-    procedure Add_File(F_sgf: in out SGF; F_nom: in Unbounded_String; F_flag: in DF_Flag; F_perm: in Natural; F_taille: in Natural) is
-    begin
-        Arbre_DF.Ajouter(F_sgf.Courrant, Creer_DF(F_nom, F_flag, F_perm, F_taille));
-    end Add_File;
-
 
     -- PRIVATE
 
     -- package
-    procedure Afficher_DF(F_df: in DF) is
+    procedure Afficher_DF_complet(F_df: in DF) is
     begin
         Put_Line("Nom: " & To_String(F_df.Nom));
         case F_df.Flag is
@@ -65,7 +71,12 @@ package body P_SGF is
         Put_Line("Permissions: " & Natural'Image(F_df.Perm));
         Put_Line("Taille: " & Natural'Image(F_df.Taille));
         New_Line;
-    end Afficher_DF;
+    end Afficher_DF_complet;
+
+    procedure Afficher_DF_simple(F_df: in DF) is
+    begin
+        Put_Line(To_String(F_df.Nom));
+    end Afficher_DF_simple;
 
     -- Sous-programmes
 
@@ -75,6 +86,7 @@ package body P_SGF is
     --         F_Perm: in DF_Perm
     procedure Creer_dossier(F_Arbre: in out Arbre_DF.Arbre; F_Nom: in Unbounded_String; F_Perm: in Natural) is
     begin
+        -- TODO : créer un DF
         null;
     end Creer_dossier;
     
@@ -85,6 +97,7 @@ package body P_SGF is
     --         F_Taille: in Integer
     procedure Creer_fichier(F_Arbre: in out Arbre; F_Nom: in Unbounded_String; F_Perm: in Natural; F_Taille: in Natural) is
     begin
+        -- TODO : créer un DF
         null;
     end Creer_fichier;
 
@@ -92,7 +105,7 @@ package body P_SGF is
     -- params: F_Arbre: in Arbre
     procedure Afficher(F_sgf: in SGF) is
     begin
-        Afficher_Arbre_SGF(F_sgf.Racine);
+        Afficher_Arbre_SGF_simple(F_sgf.Courrant);
     end Afficher;
 
     -- procedure Supprimer : supprime un élément du SGF
@@ -100,6 +113,7 @@ package body P_SGF is
     --         F_Element: in Arbre
     procedure Supprimer(F_Arbre: in out Arbre; F_Element: in Arbre) is
     begin
+        -- TODO : supprimer un élément
         null;
     end Supprimer;
     
@@ -109,6 +123,7 @@ package body P_SGF is
     --         F_Parent: in Arbre
     procedure Deplacer(F_Arbre: in out Arbre; F_Element: in Arbre; F_Parent: in Arbre) is
     begin
+        -- TODO : déplacer un élément
         null;
     end Deplacer;
 
@@ -117,18 +132,7 @@ package body P_SGF is
     --         F_nouvelle_taille
     procedure Archiver(F_Arbre: in out Arbre; F_Element: in Arbre) is
     begin
+        -- TODO : archiver un élément
         null;
     end Archiver;
-
-    -- procedure Creer_DF: creer un DF
-    -- params: F_nom: in Unbounded_String
-    --         F_flag: in DF_Flag
-    --         F_perm: in Natural
-    --         F_taille: in Natural
-    -- return: DF
-    function Creer_DF(F_nom: in Unbounded_String; F_flag: in DF_Flag; F_perm: in Natural; F_taille: in Natural) return DF is
-    begin
-        return DF'(Nom => F_nom, Flag => F_flag, Perm => F_perm, Taille => F_taille);
-    end Creer_DF;
-
 end P_SGF;

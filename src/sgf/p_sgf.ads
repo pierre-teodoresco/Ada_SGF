@@ -26,13 +26,8 @@ package P_SGF is
 
     -- procedure Lancer : exécute la commande
     -- params: F_Cmd: in Commande - commande à exécuter
-    procedure Lancer(F_Cmd: in Commande);
-
-    -- TESTS
-
-    procedure Display(F_sgf: in SGF);
-
-    procedure Add_File(F_sgf: in out SGF; F_nom: in Unbounded_String; F_flag: in DF_Flag; F_perm: in Natural; F_taille: in Natural);
+    --        F_sgf: in SGF - SGF sur lequel exécuter la commande
+    procedure Lancer(F_sgf: in out SGF; F_Cmd: in Commande);
 
 private
 
@@ -55,9 +50,11 @@ private
         Format: Unbounded_String;
     end record;
 
-    procedure Afficher_DF(F_df: in DF);
+    procedure Afficher_DF_complet(F_df: in DF);
+    procedure Afficher_DF_simple(F_df: in DF);
 
-    procedure Afficher_Arbre_SGF is new Arbre_DF.Afficher(Afficher_Contenu => Afficher_DF);
+    procedure Afficher_Arbre_SGF_complet is new Arbre_DF.Afficher(Afficher_Contenu => Afficher_DF_complet);
+    procedure Afficher_Arbre_SGF_simple is new Arbre_DF.Afficher(Afficher_Contenu => Afficher_DF_simple);
 
     -- Sous-programmes
 
@@ -93,12 +90,4 @@ private
     -- params: F_Arbre: in out Arbre
     --         F_nouvelle_taille
     procedure Archiver(F_Arbre: in out Arbre; F_Element: in Arbre);
-
-    -- procedure Creer_DF: creer un DF
-    -- params: F_nom: in Unbounded_String
-    --         F_flag: in DF_Flag
-    --         F_perm: in Natural
-    --         F_taille: in Natural
-    -- return: DF
-    function Creer_DF(F_nom: in Unbounded_String; F_flag: in DF_Flag; F_perm: in Natural; F_taille: in Natural) return DF;
 end P_SGF;
