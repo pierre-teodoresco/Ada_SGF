@@ -56,6 +56,13 @@ private
         Format: Unbounded_String;
     end record;
 
+    type SFGS;
+    type SFG_Liste is access SFGS;
+    type SFGS is record
+        Valeur: SGF;
+        Suivant: SFG_Liste;
+    end record;
+
     procedure Afficher_DF_complet(F_df: in DF);
     procedure Afficher_DF_simple(F_df: in DF);
 
@@ -98,4 +105,13 @@ private
     -- params: F_Arbre: in out Arbre
     --         F_nouvelle_taille
     procedure Archiver(F_Arbre: in out Arbre; F_Element: in Arbre);
+
+    -- fonction Creer_DF : crée un DF à partir d'un chemin d'accès
+    -- params: F_Chemin: in Unbounded_String
+    --         F_Flag: in DF_Flag
+    --         F_Perm: in Natural
+    --         F_Taille: in Natural
+    -- retourne : DF
+    function Creer_DF(F_Chemin: in Unbounded_String; F_Flag: in DF_Flag; F_Perm: in Natural; F_Taille: in Natural) return DF;
+
 end P_SGF;

@@ -144,4 +144,27 @@ package body P_SGF is
         -- TODO : archiver un élément
         null;
     end Archiver;
+
+    -- fonction Creer_DF : crée un DF à partir d'un chemin d'accès
+    -- params: F_Chemin: in Unbounded_String
+    --         F_Flag: in DF_Flag
+    --         F_Perm: in Natural
+    --         F_Taille: in Natural
+    -- retourne : DF
+    function Creer_DF(F_Chemin: in Unbounded_String; F_Flag: in DF_Flag; F_Perm: in Natural; F_Taille: in Natural) return DF is
+        j: Natural := 1;
+    begin
+        if F_Chemin'Length = 0 then
+            return null;
+        else
+            -- Séparer le chemin en liste à chaque '/'
+            for i in 1 .. F_Chemin'Length loop
+                if F_Chemin(I) = '/' then
+                    -- SGFS'(Unbounded_Slice(F_Chemin, j, i-1));
+                end if;
+            end loop;
+        end if;
+
+    end Creer_DF;
+
 end P_SGF;
