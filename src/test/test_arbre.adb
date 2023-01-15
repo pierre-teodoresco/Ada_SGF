@@ -17,6 +17,13 @@ procedure Test_Arbre is
 
     procedure Afficher_Entier is new Arbre_Entier.Afficher(Afficher_contenu => Put_Int);
 
+    function Egal_Entier(F_i1: in Integer; F_i2: in Integer) return Boolean is
+    begin
+        return F_i1 = F_i2;
+    end Egal_Entier;
+
+    function Rechercher_Entier is new Arbre_Entier.Rechercher(Egal => Egal_Entier);
+
     A: Arbre;
     B: Arbre;
     C: Arbre;
@@ -76,7 +83,19 @@ begin
     -- Affichage de l'arbre
     Afficher_Entier(A);
 
+    -- Recherche d'élément
+    New_Line;
+    Put_Line("--------------------");
+    Put_Line("Recherche de valeurs dans l'arbre :");
+
+    pragma Assert(not Est_vide(Rechercher_Entier(A, 5)));
+    Put_Line("L'élément 5 est présent dans l'arbre");
+
+    pragma Assert(Est_vide(Rechercher_Entier(A, 10)));
+    Put_Line("L'élément 10 n'est pas présent dans l'arbre");
+
     -- Destruction de l'arbre
     Detruire(A);
+    pragma Assert(Est_vide(A));
 
 end Test_Arbre;
