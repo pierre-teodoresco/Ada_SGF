@@ -152,16 +152,16 @@ package body P_Arbre is
         if Est_vide(F_arbre) then
             return null;
         else
-            if Egal(F_arbre.all.Contenu, F_element) then
-                return F_arbre;
-            else
-                T_noeud := Rechercher(F_arbre.all.Fils, F_element);
-                if T_noeud /= null then
+            -- Chercher si F_arbre à pour fils F_element
+            T_noeud := F_arbre.all.Fils;
+            while T_noeud /= null loop
+                -- Trouver un fils de F_arbre qui a pour valeur F_element
+                if Egal(T_noeud.all.Contenu, F_element) then
                     return T_noeud;
                 else
-                    return Rechercher(F_arbre.all.Frere, F_element);
+                    T_noeud := T_noeud.all.Frere;
                 end if;
-            end if;
+            end loop;
         end if;
     end Rechercher;
 

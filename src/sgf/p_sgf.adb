@@ -23,10 +23,12 @@ package body P_SGF is
     -- procedure Lancer : exécute la commande
     -- params: F_Cmd: in Commande - commande à exécuter
     --        F_sgf: in SGF - SGF sur lequel exécuter la commande
-    procedure Lancer(F_sgf: in out SGF; F_Cmd: in Commande) is
+    procedure Lancer(F_sgf: in out SGF; F_cmd: in Commande) is
+        temp_sgf: SGF := F_sgf;
+        chemin: Unbounded_String := F_cmd.Args.all.Valeur;
     begin
         -- Agir en fonction de la commande
-        case F_Cmd.Nom is
+        case F_cmd.Nom is
             when pwd =>
                 -- TODO : afficher le chemin du dossier courant
                 null;
@@ -36,11 +38,12 @@ package body P_SGF is
                 -- TODO : créer un dossier
                 null;
             when ls =>
-                case F_cmd.Option is
-                    when none => Afficher(F_sgf);
-                    when l => Afficher_complet(F_sgf);
-                    when others => null;
-                end case;
+                if F_cmd.Option = none then
+                    Afficher(F_sgf);
+                end if;
+                if F_cmd.Option = l then
+                    Afficher_complet(F_sgf);
+                end if;
             when cd =>
                 -- TODO : changer de dossier courant
                 null;
@@ -144,27 +147,5 @@ package body P_SGF is
         -- TODO : archiver un élément
         null;
     end Archiver;
-
-    -- fonction Creer_DF : crée un DF à partir d'un chemin d'accès
-    -- params: F_Chemin: in Unbounded_String
-    --         F_Flag: in DF_Flag
-    --         F_Perm: in Natural
-    --         F_Taille: in Natural
-    -- retourne : DF
-    function Creer_DF(F_Chemin: in Unbounded_String; F_Flag: in DF_Flag; F_Perm: in Natural; F_Taille: in Natural) return DF is
-        j: Natural := 1;
-    begin
-        if F_Chemin'Length = 0 then
-            return null;
-        else
-            -- Séparer le chemin en liste à chaque '/'
-            for i in 1 .. F_Chemin'Length loop
-                if F_Chemin(I) = '/' then
-                    -- SGFS'(Unbounded_Slice(F_Chemin, j, i-1));
-                end if;
-            end loop;
-        end if;
-
-    end Creer_DF;
 
 end P_SGF;

@@ -33,7 +33,7 @@ package P_SGF is
     -- procedure Lancer : exécute la commande
     -- params: F_Cmd: in Commande - commande à exécuter
     --        F_sgf: in SGF - SGF sur lequel exécuter la commande
-    procedure Lancer(F_sgf: in out SGF; F_Cmd: in Commande);
+    procedure Lancer(F_sgf: in out SGF; F_cmd: in Commande);
 
 private
 
@@ -71,19 +71,31 @@ private
 
     -- Sous-programmes
 
+    -- fonction Rechercher : recherche un élément dans le SGF
+    -- params: F_sgf: in SGF
+    --         F_chemin: in Unbounded_String
+    -- retourne : Arbre
+    function Rechercher_sgf(F_sgf: in SGF; F_chemin: in Unbounded_String) return Arbre;
+
+    -- fonction Rechercher_via_chemin : recherche un élément dans l'arbre via un chemin
+    -- params: F_arbre: in Arbre
+    --         F_chemin: in Unbounded_String
+    -- retourne : Arbre
+    function Rechercher_via_chemin(F_arbre: in Arbre; F_chemin: in Unbounded_String) return Arbre;
+
     -- procedure Creer_dossier : crée un dossier dans le SGF
     -- params: F_sgf: in out SGF
-    --         F_Nom: in Unbounded_String
-    --         F_Perm: in Natural
-    procedure Creer_dossier(F_sgf: in out SGF; F_Nom: in Unbounded_String; F_Perm: in Natural);
+    --         F_nom: in Unbounded_String
+    --         F_perm: in Natural
+    procedure Creer_dossier(F_sgf: in out SGF; F_nom: in Unbounded_String; F_perm: in Natural);
     
     -- procedure Creer_fichier : crée un fichier dans le SGF
     -- params: F_sgf: in out SGF
-    --         F_Nom: in Unbounded_String
-    procedure Creer_fichier(F_sgf: in out SGF; F_Nom: in Unbounded_String);
+    --         F_nom: in Unbounded_String
+    procedure Creer_fichier(F_sgf: in out SGF; F_nom: in Unbounded_String);
 
     -- procedure Afficher : affiche l'architecture du SGF
-    -- params: F_Arbre: in Arbre
+    -- params: F_arbre: in Arbre
     procedure Afficher(F_sgf: in SGF);
 
     -- procedure Afficher_complet : affiche l'architecture du SGF avec les détails
@@ -91,27 +103,19 @@ private
     procedure Afficher_complet(F_sgf: in SGF);
 
     -- procedure Supprimer : supprime un élément du SGF
-    -- params: F_Arbre: in out Arbre
-    --         F_Element: in Arbre
-    procedure Supprimer(F_Arbre: in out Arbre; F_Element: in Arbre);
+    -- params: F_arbre: in out Arbre
+    --         F_element: in Arbre
+    procedure Supprimer(F_arbre: in out Arbre; F_element: in Arbre);
     
     -- procedure Deplacer : déplace un élément du SGF
-    -- params: F_Arbre: in out Arbre
-    --         F_Element: in Arbre
-    --         F_Parent: in Arbre
-    procedure Deplacer(F_Arbre: in out Arbre; F_Element: in Arbre; F_Parent: in Arbre);
+    -- params: F_arbre: in out Arbre
+    --         F_element: in Arbre
+    --         F_parent: in Arbre
+    procedure Deplacer(F_arbre: in out Arbre; F_element: in Arbre; F_parent: in Arbre);
 
     -- procedure Archiver : archive un élément du SGF
-    -- params: F_Arbre: in out Arbre
-    --         F_nouvelle_taille
-    procedure Archiver(F_Arbre: in out Arbre; F_Element: in Arbre);
-
-    -- fonction Creer_DF : crée un DF à partir d'un chemin d'accès
-    -- params: F_Chemin: in Unbounded_String
-    --         F_Flag: in DF_Flag
-    --         F_Perm: in Natural
-    --         F_Taille: in Natural
-    -- retourne : DF
-    function Creer_DF(F_Chemin: in Unbounded_String; F_Flag: in DF_Flag; F_Perm: in Natural; F_Taille: in Natural) return DF;
+    -- params: F_arbre: in out Arbre
+    --         F_element: in Arbre
+    procedure Archiver(F_arbre: in out Arbre; F_element: in Arbre);
 
 end P_SGF;

@@ -236,27 +236,29 @@ F_noeud^.Pere <- F_nouveau_pere
 
 #### Rechercher
 
-##### signature: procedure Rechercher(F_noeud: in Arbre, F_valeur: in Type_Element)
+##### signature: fonction Rechercher(F_noeud: in Arbre, F_valeur: in Type_Element) renvoie Arbre
 R0: Rechercher un noeud, retourne le noeud trouvé ou null sinon
 R1: Comment R0?
 ```
     Si Est_vide(F_noeud) then
         Retourner NULL
     Sinon
-A11     Rechercher le noeud
+A11     Chercher si F_arbre à pour fils F_element
     FinSi
 ```
 
 R2: Comment A11?
-    Si Egal(F_noeud^.Valeur, F_valeur) = Vrai Alors
-        Retourner F_noeud
-    Sinon
-A21     Rechercher dans les fils de F_noeud et dans les frères de F_noeud
-    Fin Si
+    T_noeud <- F_arbre^.Fils
+    TantQue T_noeud /= null loop
+        Trouver un fils de F_arbre qui a pour valeur F_element
+    Fin TantQue
 ```
 
 R3: Comment A21?
 ```
-    Rechercher(F_noeud^.Fils, F_valeur)
-    Rechercher(F_noeud^.Frere, F_valeur)
+    Si Egal(T_noeud^.Contenu, F_valeur) then            Egal est un predicat generique dépendant du type Type_Element
+        Renvoyer T_noeud
+    Sinon
+        T_noeud <- T_noeud^.Frere
+    end if;
 ```
