@@ -75,10 +75,11 @@ private
     -- Sous-programmes
 
     -- fonction Rechercher : recherche un élément dans le SGF
-    -- params: F_sgf: in SGF
-    --         F_chemin: in Unbounded_String
-    -- retourne : Arbre
-    function Rechercher_sgf(F_sgf: in SGF; F_chemin: in Unbounded_String) return Arbre;
+    -- params: F_sgf: in SGF                        - SGF dans lequel rechercher
+    --         F_chemin: in Unbounded_String        - chemin de l'élément à rechercher
+    --         F_est_createur: in Boolean           - True si la fonction est appelée par une fonction de création
+    -- retourne : Arbre 
+    function Rechercher_sgf(F_sgf: in SGF; F_chemin: in Unbounded_String; F_est_createur: in Boolean) return Arbre;
 
     -- fonction Rechercher_via_chemin : recherche un élément dans l'arbre via un chemin
     -- params: F_arbre: in Arbre
