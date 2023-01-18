@@ -25,7 +25,7 @@ package body P_SGF is
     --        F_sgf: in SGF - SGF sur lequel exécuter la commande
     procedure Lancer(F_sgf: in out SGF; F_cmd: in Commande) is
         temp_arbre: Arbre;
-        chemin: Unbounded_String := F_cmd.Args.all.Valeur;
+        chemin: Unbounded_String;
     begin
         -- Agir en fonction de la commande
         case F_cmd.Nom is
@@ -33,11 +33,13 @@ package body P_SGF is
                 -- TODO : afficher le chemin du dossier courant
                 null;
             when touch =>
+                chemin := F_cmd.Args.all.Valeur;
                 temp_arbre := Rechercher_sgf(F_sgf, chemin);
-                Creer_fichier(temp_arbre, Nom_via_chemin(F_chemin => chemin));
+                Creer_fichier(temp_arbre, Nom_via_chemin(chemin));
             when mkdir =>
-                -- TODO : créer un dossier
-                null;
+                chemin := F_cmd.Args.all.Valeur;
+                temp_arbre := Rechercher_sgf(F_sgf, chemin);
+                Creer_dossier(temp_arbre, Nom_via_chemin(chemin));
             when ls =>
                 if F_cmd.Option = none then
                     Afficher(F_sgf);
@@ -102,18 +104,18 @@ package body P_SGF is
         Temp_chemin: Unbounded_String := F_chemin;
     begin
         -- Si le chemin est vide, on retourne le dossier courant
-        if F_chemin = To_Unbounded_String("") then
-            return F_sgf.Courrant;
+        if Length(F_chemin) = 0  or else Index(F_chemin, "/") = 0 then
+            return F_sgf.Courrant;   
         end if;
 
         -- Si le chemin commence par un /, on part de la racine
-        if F_chemin(1) = '/' then
+        if To_String(F_chemin)(1) = '/' then
             Temp_arbre := F_sgf.Racine;
-            Temp_chemin := Temp_chemin(2 .. Temp_chemin'Last);
+            Temp_chemin := Unbounded_Slice(Temp_chemin, 2, Length(Temp_chemin));
 
-        elsif F_chemin(1..2) = To_Unbounded_String("./") then
+        elsif To_String(F_chemin)(1..2) = "./" then
             -- Si le chemin commence par ./, on part du dossier courant
-            Temp_chemin := Temp_chemin(3 .. Temp_chemin'Last);
+            Temp_chemin := Unbounded_Slice(Temp_chemin, 3, Length(Temp_chemin));
 
         end if;
 
@@ -127,27 +129,32 @@ package body P_SGF is
     -- retourne : Arbre
     function Rechercher_via_chemin(F_arbre: in Arbre; F_chemin: in Unbounded_String) return Arbre is
         Sous_arbre: Arbre;
+        Nom_pere: Unbounded_String;
+        Nom_fils: Unbounded_String;
     begin
         -- Si le chemin est vide, on retourne l'arbre
-        if F_chemin'Length = 0 then
+        if Length(F_chemin) = 0 then
             return F_arbre;
 
-        elsif F_chemin'Length = 2 and F_chemin(1..2) = To_Unbounded_String("..") then
+        elsif Length(F_chemin) = 2 and To_String(F_chemin)(1..2) = ".." then
             -- Si le chemin est .., on retourne le parent
-            return F_arbre.Parent;
+            return Pere(F_arbre);
 
-        elsif F_chemin(1..2) = To_Unbounded_String("..") then
+        elsif To_String(F_chemin)(1..2) = ".." then
             -- Si le chemin commence par .., on cherche dans le parent
-            return Rechercher_via_chemin(F_arbre.Parent, F_chemin(3 .. F_chemin'Last));
+            return Rechercher_via_chemin(Pere(F_arbre), Unbounded_Slice(F_chemin, 3, Length(F_chemin)));
 
-        elsif F_chemin(1) /= To_Unbounded_String("/") then
+        elsif To_String(F_chemin)(1) /= '/' then
             -- Si le chemin commence par un /, on cherche dans le parent
             return Arbre_DF.Rechercher(F_arbre, DF'(Nom => F_chemin, Flag => Dossier, Perm => 0, Taille => 0));
         
         else
             -- Sinon, on cherche dans le sous-arbre
-            Sous_arbre := Arbre_DF.Rechercher(F_arbre, DF'(Nom => F_chemin(1 .. F_chemin'First - 1), Flag => Dossier, Perm => 0, Taille => 0));
-            return Rechercher_via_chemin(Sous_arbre, F_chemin(2 .. F_chemin'Last));
+            Nom_pere := Unbounded_Slice(F_chemin, 1, Index(F_chemin, "/")-1);
+            Sous_arbre := Arbre_DF.Rechercher(F_arbre, DF'(Nom => Nom_pere, Flag => Dossier, Perm => 0, Taille => 0));
+
+            Nom_fils := Unbounded_Slice(F_chemin, Index(F_chemin, "/")+1, Length(F_chemin));
+            return Rechercher_via_chemin(Sous_arbre, Nom_fils);
 
         end if;
 
@@ -159,9 +166,9 @@ package body P_SGF is
     function Nom_via_chemin(F_chemin: in Unbounded_String) return Unbounded_String is
     begin
         -- parcourir le chemin à l'envers jusqu'à trouver un /
-        for i in F_chemin'Last..1 loop
-            if F_chemin(i) = To_Unbounded_String("/") then
-                return F_chemin(i+1..F_chemin'Last);
+        for i in Length(F_chemin)..1 loop
+            if To_String(F_chemin)(i) = '/' then
+                return Unbounded_Slice(F_chemin, i+1, Length(F_chemin));
             end if;
         end loop;
         -- si on ne trouve pas de /, on retourne le chemin
@@ -169,20 +176,16 @@ package body P_SGF is
     end Nom_via_chemin;
 
     -- procedure Creer_dossier : crée un dossier dans le SGF
-    -- params: F_sgf: in out SGF
+    -- params: F_arbre: in out Arbre
     --         F_Nom: in Unbounded_String
-    --         F_Perm: in Natural
-    procedure Creer_dossier(F_sgf: in out SGF; F_Nom: in Unbounded_String; F_Perm: in Natural) is
+    procedure Creer_dossier(F_arbre: in out Arbre; F_Nom: in Unbounded_String) is
     begin
-        -- TODO : créer un dossier
-        null;
+        Arbre_DF.Ajouter(F_arbre, DF'(Nom => F_Nom, Flag => Dossier, Perm => 777, Taille => 0));
     end Creer_dossier;
     
     -- procedure Creer_fichier : crée un fichier dans le SGF
-    -- params: F_sgf: in out SGF
+    -- params: F_arbre: in out Arbre
     --         F_Nom: in Unbounded_String
-    --         F_Perm: in Natural
-    --         F_Taille: in Natural
     procedure Creer_fichier(F_arbre: in out Arbre; F_Nom: in Unbounded_String) is
     begin
         Arbre_DF.Ajouter(F_arbre, DF'(Nom => F_Nom, Flag => Fichier, Perm => 777, Taille => 0));

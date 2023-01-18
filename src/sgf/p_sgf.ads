@@ -94,12 +94,11 @@ private
     -- procedure Creer_dossier : crée un dossier dans le SGF
     -- params: F_sgf: in out SGF
     --         F_nom: in Unbounded_String
-    --         F_perm: in Natural
-    procedure Creer_dossier(F_sgf: in out SGF; F_nom: in Unbounded_String; F_perm: in Natural);
+    procedure Creer_dossier(F_arbre: in out Arbre; F_Nom: in Unbounded_String);
     
     -- procedure Creer_fichier : crée un fichier dans le SGF
-    -- params: F_sgf: in out SGF
-    --         F_nom: in Unbounded_String
+    -- params: F_arbre: in out Arbre
+    --         F_Nom: in Unbounded_String
     procedure Creer_fichier(F_arbre: in out Arbre; F_nom: in Unbounded_String);
 
     -- procedure Afficher : affiche l'architecture du SGF
