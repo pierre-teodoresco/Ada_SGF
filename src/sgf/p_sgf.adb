@@ -21,8 +21,8 @@ package body P_SGF is
     end Creer;
 
     -- procedure Lancer : exécute la commande
-    -- params: F_Cmd: in Commande - commande à exécuter
-    --        F_sgf: in SGF - SGF sur lequel exécuter la commande
+    -- params: F_Cmd: in Commande   - commande à exécuter
+    --         F_sgf: in SGF        - SGF sur lequel exécuter la commande
     procedure Lancer(F_sgf: in out SGF; F_cmd: in Commande) is
         temp_arbre: Arbre;
         chemin: Unbounded_String;
@@ -34,11 +34,11 @@ package body P_SGF is
                 null;
             when touch =>
                 chemin := F_cmd.Args.all.Valeur;
-                temp_arbre := Rechercher_sgf(F_sgf, chemin);
+                temp_arbre := Rechercher_sgf(F_sgf, chemin, True);
                 Creer_fichier(temp_arbre, Nom_via_chemin(chemin));
             when mkdir =>
                 chemin := F_cmd.Args.all.Valeur;
-                temp_arbre := Rechercher_sgf(F_sgf, chemin);
+                temp_arbre := Rechercher_sgf(F_sgf, chemin, True);
                 Creer_dossier(temp_arbre, Nom_via_chemin(chemin));
             when ls =>
                 if F_cmd.Option = none then
@@ -96,17 +96,27 @@ package body P_SGF is
     -- Sous-programmes
 
     -- fonction Rechercher : recherche un élément dans le SGF
-    -- params: F_sgf: in SGF
-    --         F_chemin: in Unbounded_String
-    -- retourne : Arbre
-    function Rechercher_sgf(F_sgf: in SGF; F_chemin: in Unbounded_String) return Arbre is
+    -- params: F_sgf: in SGF                       - SGF dans lequel rechercher
+    --         F_chemin: in Unbounded_String       - chemin de l'élément à rechercher
+    --         F_est_createur: in Boolean          - True si la fonction est appelée par une fonction de création
+    -- retourne : Arbre 
+    function Rechercher_sgf(F_sgf: in SGF; F_chemin: in Unbounded_String; F_est_createur: in Boolean) return Arbre is
         Temp_arbre: Arbre := F_sgf.Courrant;
         Temp_chemin: Unbounded_String := F_chemin;
     begin
         -- Si le chemin est vide, on retourne le dossier courant
-        if Length(F_chemin) = 0  or else Index(F_chemin, "/") = 0 then
+        if Length(F_chemin) = 0 then
             return F_sgf.Courrant;   
         end if;
+
+        -- Si la commande est un createur, on supprime le dernier élément du chemin
+        -- pour chercher uniquement son parent
+        if F_est_createur then
+            -- supprimer le dernier element du chemin 
+            Temp_chemin := Unbounded_Slice(Temp_chemin, 1, Length(Temp_chemin) - Length(Nom_via_chemin(Temp_chemin)));
+        end if;
+
+        Put_Line(To_String(Temp_chemin));
 
         -- Si le chemin commence par un /, on part de la racine
         if To_String(F_chemin)(1) = '/' then
@@ -116,7 +126,6 @@ package body P_SGF is
         elsif To_String(F_chemin)(1..2) = "./" then
             -- Si le chemin commence par ./, on part du dossier courant
             Temp_chemin := Unbounded_Slice(Temp_chemin, 3, Length(Temp_chemin));
-
         end if;
 
         return Rechercher_via_chemin(Temp_arbre, Temp_chemin);
@@ -166,7 +175,7 @@ package body P_SGF is
     function Nom_via_chemin(F_chemin: in Unbounded_String) return Unbounded_String is
     begin
         -- parcourir le chemin à l'envers jusqu'à trouver un /
-        for i in Length(F_chemin)..1 loop
+        for i in reverse 1..Length(F_chemin) loop
             if To_String(F_chemin)(i) = '/' then
                 return Unbounded_Slice(F_chemin, i+1, Length(F_chemin));
             end if;
