@@ -47,8 +47,11 @@ private
     end record;
 
     -- packages
+
+    function Egal_DF(F_1: in DF; F_2: in DF) return Boolean;
+
     package Arbre_DF is 
-        new P_Arbre(Type_Element => DF);
+        new P_Arbre(Type_Element => DF, Egal => Egal_DF);
     use Arbre_DF;
     type SGF is record
         Racine: Arbre;

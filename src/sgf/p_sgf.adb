@@ -65,6 +65,12 @@ package body P_SGF is
     -- PRIVATE
 
     -- package
+
+    function Egal_DF(F_1: in DF; F_2: in DF) return Boolean is
+    begin
+        return F_1.Nom = F_2.Nom;
+    end Egal_DF;
+
     procedure Afficher_DF_complet(F_df: in DF) is
     begin
         Put_Line("Nom: " & To_String(F_df.Nom));
@@ -85,6 +91,66 @@ package body P_SGF is
     end Afficher_DF_simple;
 
     -- Sous-programmes
+
+    -- fonction Rechercher : recherche un élément dans le SGF
+    -- params: F_sgf: in SGF
+    --         F_chemin: in Unbounded_String
+    -- retourne : Arbre
+    function Rechercher_sgf(F_sgf: in SGF; F_chemin: in Unbounded_String) return Arbre is
+        temp_arbre: Arbre := F_sgf.Courrant;
+        temp_chemin: Unbounded_String := F_chemin;
+    begin
+        -- Si le chemin est vide, on retourne le dossier courant
+        if F_chemin = To_Unbounded_String("") then
+            return F_sgf.Courrant;
+        end if;
+
+        -- Si le chemin commence par un /, on part de la racine
+        if F_chemin(1) = '/' then
+            temp_arbre := F_sgf.Racine;
+            temp_chemin := temp_chemin(2 .. temp_chemin'Last);
+
+        elsif F_chemin(1..2) = To_Unbounded_String("./") then
+            -- Si le chemin commence par ./, on part du dossier courant
+            temp_chemin := temp_chemin(3 .. temp_chemin'Last);
+
+        end if;
+
+        return Rechercher_via_chemin(temp_arbre, temp_chemin);
+        
+    end Rechercher_sgf;
+
+    -- fonction Rechercher_via_chemin : recherche un élément dans l'arbre via un chemin
+    -- params: F_arbre: in Arbre
+    --         F_chemin: in Unbounded_String
+    -- retourne : Arbre
+    function Rechercher_via_chemin(F_arbre: in Arbre; F_chemin: in Unbounded_String) return Arbre is
+        Sous_arbre: Arbre;
+    begin
+        -- Si le chemin est vide, on retourne l'arbre
+        if F_chemin'Length = 0 then
+            return F_arbre;
+
+        elsif F_chemin'Length = 2 and F_chemin(1..2) = To_Unbounded_String("..") then
+            -- Si le chemin est .., on retourne le parent
+            return F_arbre.Parent;
+
+        elsif F_chemin(1..2) = To_Unbounded_String("..") then
+            -- Si le chemin commence par .., on cherche dans le parent
+            return Rechercher_via_chemin(F_arbre.Parent, F_chemin(3 .. F_chemin'Last));
+
+        elsif F_chemin(1) /= To_Unbounded_String("/") then
+            -- Si le chemin commence par un /, on cherche dans le parent
+            return Arbre_DF.Rechercher(F_arbre, DF'(Nom => F_chemin, Flag => Dossier, Perm => 0, Taille => 0));
+        
+        else
+            -- Sinon, on cherche dans le sous-arbre
+            Sous_arbre := Arbre_DF.Rechercher(F_arbre, DF'(Nom => F_chemin(1 .. F_chemin'First - 1), Flag => Dossier, Perm => 0, Taille => 0));
+            return Rechercher_via_chemin(Sous_arbre, F_chemin(2 .. F_chemin'Last));
+
+        end if;
+
+    end Rechercher_via_chemin;
 
     -- procedure Creer_dossier : crée un dossier dans le SGF
     -- params: F_sgf: in out SGF

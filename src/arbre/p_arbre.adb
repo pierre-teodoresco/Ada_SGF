@@ -50,6 +50,14 @@ package body P_Arbre is
         return F_noeud.all.Frere;
     end Frere;
 
+    -- fonction Contenu: retourne le contenu d'un noeud
+    -- paramètres: F_noeud: noeud dont on veut le contenu
+    -- résultat: contenu du noeud
+    function Contenu(F_noeud: in Arbre) return Type_Element is
+    begin
+        return F_noeud.all.Contenu;
+    end Contenu;
+
     -- procedure Ajouter: ajoute un fils à la fin de la liste des fils d'un noeud
     -- paramètres: F_noeud: noeud auquel on veut ajouter un fils
     --             F_element: element à ajouter
@@ -152,18 +160,40 @@ package body P_Arbre is
         if Est_vide(F_arbre) then
             return null;
         else
-            -- Chercher si F_arbre à pour fils F_element
-            T_noeud := F_arbre.all.Fils;
+            if Egal(F_arbre.all.Contenu, F_element) then
+                return F_arbre;
+            else
+                T_noeud := Rechercher(F_arbre.all.Fils, F_element);
+                if T_noeud /= null then
+                    return T_noeud;
+                else
+                    return Rechercher(F_arbre.all.Frere, F_element);
+                end if;
+            end if;
+        end if;
+    end Rechercher;
+
+    -- procedure Rechercher_fils : recherche un fils d'un noeud
+    -- paramètres: F_pere: père du fils recherché
+    --             F_element: élément à rechercher
+    -- résultat: noeud contenant l'élément recherché
+    function Rechercher_fils(F_pere: in Arbre; F_element: in Type_Element) return Arbre is
+        T_noeud: Arbre;
+    begin
+        if Est_vide(F_pere) then
+            return null;
+        else
+            T_noeud := F_pere.all.Fils;
             while T_noeud /= null loop
-                -- Trouver un fils de F_arbre qui a pour valeur F_element
                 if Egal(T_noeud.all.Contenu, F_element) then
                     return T_noeud;
                 else
                     T_noeud := T_noeud.all.Frere;
                 end if;
             end loop;
+            return null;
         end if;
-    end Rechercher;
+    end Rechercher_fils;
 
     --  procedure Afficher: affiche un arbre
     --  paramètres: F_arbre: arbre à afficher

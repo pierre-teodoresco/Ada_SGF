@@ -5,8 +5,13 @@ with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
 procedure Test_Arbre is
 
     -- instanciation de package générique
+
+    function Egal_Entier(F_i1: in Integer; F_i2: in Integer) return Boolean is
+    begin
+        return F_i1 = F_i2;
+    end Egal_Entier;
     package Arbre_Entier is
-        new P_Arbre(Type_Element => Integer);
+        new P_Arbre(Type_Element => Integer, Egal => Egal_Entier);
     use Arbre_Entier;
     
     -- affichage générique
@@ -16,13 +21,6 @@ procedure Test_Arbre is
     end Put_Int;
 
     procedure Afficher_Entier is new Arbre_Entier.Afficher(Afficher_contenu => Put_Int);
-
-    function Egal_Entier(F_i1: in Integer; F_i2: in Integer) return Boolean is
-    begin
-        return F_i1 = F_i2;
-    end Egal_Entier;
-
-    function Rechercher_Entier is new Arbre_Entier.Rechercher(Egal => Egal_Entier);
 
     A: Arbre;
     B: Arbre;
@@ -88,10 +86,10 @@ begin
     Put_Line("--------------------");
     Put_Line("Recherche de valeurs dans l'arbre :");
 
-    pragma Assert(not Est_vide(Rechercher_Entier(A, 5)));
+    pragma Assert(not Est_vide(Rechercher(A, 5)));
     Put_Line("L'élément 5 est présent dans l'arbre");
 
-    pragma Assert(Est_vide(Rechercher_Entier(A, 10)));
+    pragma Assert(Est_vide(Rechercher(A, 10)));
     Put_Line("L'élément 10 n'est pas présent dans l'arbre");
 
     -- Destruction de l'arbre

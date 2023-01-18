@@ -236,27 +236,27 @@ F_noeud^.Pere <- F_nouveau_pere
 
 #### Rechercher
 
-##### signature: fonction Rechercher(F_noeud: in Arbre, F_valeur: in Type_Element) renvoie Arbre
+##### signature: fonction Rechercher_fils(F_pere: in Arbre, F_element: in Type_Element) renvoie Arbre
 R0: Rechercher un noeud, retourne le noeud trouvé ou null sinon
 R1: Comment R0?
 ```
-    Si Est_vide(F_noeud) then
+    Si Est_vide(F_pere) then
         Retourner NULL
     Sinon
-A11     Chercher si F_arbre à pour fils F_element
+A11     Chercher si F_pere à pour fils F_element
     FinSi
 ```
 
 R2: Comment A11?
-    T_noeud <- F_arbre^.Fils
+    T_noeud <- F_pere^.Fils
     TantQue T_noeud /= null loop
-        Trouver un fils de F_arbre qui a pour valeur F_element
+        Trouver un fils de F_pere qui a pour valeur F_element
     Fin TantQue
 ```
 
 R3: Comment A21?
 ```
-    Si Egal(T_noeud^.Contenu, F_valeur) then            Egal est un predicat generique dépendant du type Type_Element
+    Si Egal(T_noeud^.Contenu, F_element) then            Egal est un predicat generique dépendant du type Type_Element
         Renvoyer T_noeud
     Sinon
         T_noeud <- T_noeud^.Frere

@@ -1,5 +1,6 @@
 generic
     type Type_Element is private;
+    with function Egal(F_element1: in Type_Element; F_element2: in Type_Element) return Boolean;
 package P_Arbre is
     -- types
     type Arbre is private;
@@ -31,6 +32,11 @@ package P_Arbre is
     -- résultat: frère du noeud
     function Frere(F_noeud: in Arbre) return Arbre;
 
+    -- fonction Contenu: retourne le contenu d'un noeud
+    -- paramètres: F_noeud: noeud dont on veut le contenu
+    -- résultat: contenu du noeud
+    function Contenu(F_noeud: in Arbre) return Type_Element;
+
     -- procedure Ajouter: ajoute un fils à la fin de la liste des fils d'un noeud
     -- paramètres: F_noeud: noeud auquel on veut ajouter un fils
     --             F_element: element à ajouter 
@@ -49,9 +55,13 @@ package P_Arbre is
     -- paramètres: F_arbre: arbre dans lequel on recherche
     --             F_element: élément à rechercher
     -- résultat: noeud contenant l'élément recherché
-    generic 
-        with function Egal(F_element1: in Type_Element; F_element2: in Type_Element) return Boolean;
     function Rechercher(F_arbre: in Arbre; F_element: in Type_Element) return Arbre;
+
+    -- procedure Rechercher_fils : recherche un fils d'un noeud
+    -- paramètres: F_pere: père du fils recherché
+    --             F_element: élément à rechercher
+    -- résultat: noeud contenant l'élément recherché
+    function Rechercher_fils(F_pere: in Arbre; F_element: in Type_Element) return Arbre;
 
     -- procedure Afficher: affiche un arbre
     -- paramètres: F_arbre: arbre à afficher
