@@ -24,7 +24,7 @@ package body P_SGF is
     -- params: F_Cmd: in Commande - commande à exécuter
     --        F_sgf: in SGF - SGF sur lequel exécuter la commande
     procedure Lancer(F_sgf: in out SGF; F_cmd: in Commande) is
-        temp_sgf: SGF := F_sgf;
+        temp_arbre: Arbre;
         chemin: Unbounded_String := F_cmd.Args.all.Valeur;
     begin
         -- Agir en fonction de la commande
@@ -33,7 +33,8 @@ package body P_SGF is
                 -- TODO : afficher le chemin du dossier courant
                 null;
             when touch =>
-                Creer_fichier(F_sgf, F_cmd.Args.all.Valeur);
+                temp_arbre := Rechercher_sgf(F_sgf, chemin);
+                Creer_fichier(temp_arbre, Nom_via_chemin(F_chemin => chemin));
             when mkdir =>
                 -- TODO : créer un dossier
                 null;
@@ -97,8 +98,8 @@ package body P_SGF is
     --         F_chemin: in Unbounded_String
     -- retourne : Arbre
     function Rechercher_sgf(F_sgf: in SGF; F_chemin: in Unbounded_String) return Arbre is
-        temp_arbre: Arbre := F_sgf.Courrant;
-        temp_chemin: Unbounded_String := F_chemin;
+        Temp_arbre: Arbre := F_sgf.Courrant;
+        Temp_chemin: Unbounded_String := F_chemin;
     begin
         -- Si le chemin est vide, on retourne le dossier courant
         if F_chemin = To_Unbounded_String("") then
@@ -107,16 +108,16 @@ package body P_SGF is
 
         -- Si le chemin commence par un /, on part de la racine
         if F_chemin(1) = '/' then
-            temp_arbre := F_sgf.Racine;
-            temp_chemin := temp_chemin(2 .. temp_chemin'Last);
+            Temp_arbre := F_sgf.Racine;
+            Temp_chemin := Temp_chemin(2 .. Temp_chemin'Last);
 
         elsif F_chemin(1..2) = To_Unbounded_String("./") then
             -- Si le chemin commence par ./, on part du dossier courant
-            temp_chemin := temp_chemin(3 .. temp_chemin'Last);
+            Temp_chemin := Temp_chemin(3 .. Temp_chemin'Last);
 
         end if;
 
-        return Rechercher_via_chemin(temp_arbre, temp_chemin);
+        return Rechercher_via_chemin(Temp_arbre, Temp_chemin);
         
     end Rechercher_sgf;
 
@@ -152,6 +153,21 @@ package body P_SGF is
 
     end Rechercher_via_chemin;
 
+    -- fonction Nom_via_chemin : retourne le nom d'un élément via un chemin
+    -- params: F_chemin: in Unbounded_String
+    -- retourne : Unbounded_String
+    function Nom_via_chemin(F_chemin: in Unbounded_String) return Unbounded_String is
+    begin
+        -- parcourir le chemin à l'envers jusqu'à trouver un /
+        for i in F_chemin'Last..1 loop
+            if F_chemin(i) = To_Unbounded_String("/") then
+                return F_chemin(i+1..F_chemin'Last);
+            end if;
+        end loop;
+        -- si on ne trouve pas de /, on retourne le chemin
+        return F_chemin;
+    end Nom_via_chemin;
+
     -- procedure Creer_dossier : crée un dossier dans le SGF
     -- params: F_sgf: in out SGF
     --         F_Nom: in Unbounded_String
@@ -167,9 +183,9 @@ package body P_SGF is
     --         F_Nom: in Unbounded_String
     --         F_Perm: in Natural
     --         F_Taille: in Natural
-    procedure Creer_fichier(F_sgf: in out SGF; F_Nom: in Unbounded_String) is
+    procedure Creer_fichier(F_arbre: in out Arbre; F_Nom: in Unbounded_String) is
     begin
-        Arbre_DF.Ajouter(F_sgf.Courrant, DF'(Nom => F_Nom, Flag => Fichier, Perm => 777, Taille => 0));
+        Arbre_DF.Ajouter(F_arbre, DF'(Nom => F_Nom, Flag => Fichier, Perm => 777, Taille => 0));
     end Creer_fichier;
 
     -- procedure Afficher : affiche l'architecture du SGF

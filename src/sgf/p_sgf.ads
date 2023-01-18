@@ -86,6 +86,11 @@ private
     -- retourne : Arbre
     function Rechercher_via_chemin(F_arbre: in Arbre; F_chemin: in Unbounded_String) return Arbre;
 
+    -- fonction Nom_via_chemin : retourne le nom d'un élément via un chemin
+    -- params: F_chemin: in Unbounded_String
+    -- retourne : Unbounded_String
+    function Nom_via_chemin(F_chemin: in Unbounded_String) return Unbounded_String;
+
     -- procedure Creer_dossier : crée un dossier dans le SGF
     -- params: F_sgf: in out SGF
     --         F_nom: in Unbounded_String
@@ -95,7 +100,7 @@ private
     -- procedure Creer_fichier : crée un fichier dans le SGF
     -- params: F_sgf: in out SGF
     --         F_nom: in Unbounded_String
-    procedure Creer_fichier(F_sgf: in out SGF; F_nom: in Unbounded_String);
+    procedure Creer_fichier(F_arbre: in out Arbre; F_nom: in Unbounded_String);
 
     -- procedure Afficher : affiche l'architecture du SGF
     -- params: F_arbre: in Arbre
