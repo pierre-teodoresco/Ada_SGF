@@ -1,7 +1,3 @@
-with Ada.Unchecked_Deallocation;
-with Ada.Text_IO; use Ada.Text_IO;
-with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
-
 package body P_Arbre is
 
     -- implémentation de Unchecked_Deallocation

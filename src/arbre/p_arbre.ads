@@ -1,3 +1,7 @@
+with Ada.Unchecked_Deallocation;
+with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
+
 generic
     type Type_Element is private;
     with function Egal(F_element1: in Type_Element; F_element2: in Type_Element) return Boolean;
