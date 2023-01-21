@@ -2,7 +2,7 @@ package body P_Chaine is
 
     -- implémentation de Unchecked_Deallocation
     procedure Liberer is
-        new Ada.Unchecked_Deallocation(Noeud, Arbre);
+        new Ada.Unchecked_Deallocation(Noeud_String, Liste_String);
 
     function Init_liste return Liste_String is
     begin
@@ -56,9 +56,12 @@ package body P_Chaine is
             chemin := Unbounded_Slice(chemin, 2, Length(chemin));
         end if;
 
+        Put_Line(To_String(chemin));
+
         -- parcourir la chaine et ajouter à chaque / un élément dans la liste
-        while chemin = To_Unbounded_String("") loop
+        while chemin /= To_Unbounded_String("") loop
             if To_String(chemin)(i) = '/' then
+                Put_Line(To_String(Unbounded_Slice(chemin, 1, i-1)));
                 -- slice de la chaine de 1 à i-1
                 elem := Unbounded_Slice(chemin, 1, i-1);
                 -- ajouter chemin à la liste
@@ -67,6 +70,7 @@ package body P_Chaine is
                 chemin := Unbounded_Slice(chemin, i+1, Length(chemin));
                 -- remettre i à 1
                 i := 1;
+                Put_Line(To_String(chemin));
             else
                 i := i + 1;
             end if;
