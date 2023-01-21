@@ -1,23 +1,22 @@
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with P_Arbre;
+with P_Chaine; use P_Chaine;
 
 package P_SGF is 
     -- types
     type DF_Flag is (Dossier, Fichier);
+    type DF is record
+        Nom: Unbounded_String;
+        Flag: DF_Flag;
+        Perm: Natural;
+        Taille: Natural;
+    end record;
 
     type SGF is private;
 
     type Commandes is (pwd, touch, mkdir, ls, cd, rm, cp, mv, tar);
     type Options is (none, r, l);
-
-    type String_Node;
-    type Liste_String is access String_Node;
-    type String_Node is record
-        Valeur: Unbounded_String;
-        Suivant: Liste_String;
-    end record;
-
     type Commande is record
         Nom: Commandes;
         Option: Options;
@@ -36,16 +35,6 @@ package P_SGF is
     procedure Lancer(F_sgf: in out SGF; F_cmd: in Commande);
 
 private
-
-    -- types
-    --  type DF_Flag is (Dossier, Fichier);
-    type DF is record
-        Nom: Unbounded_String;
-        Flag: DF_Flag;
-        Perm: Natural;
-        Taille: Natural;
-    end record;
-
     -- packages
 
     function Egal_DF(F_1: in DF; F_2: in DF) return Boolean;
@@ -86,11 +75,6 @@ private
     --         F_chemin: in Unbounded_String
     -- retourne : Arbre
     function Rechercher_via_chemin(F_arbre: in Arbre; F_chemin: in Unbounded_String) return Arbre;
-
-    -- fonction Nom_via_chemin : retourne le nom d'un élément via un chemin
-    -- params: F_chemin: in Unbounded_String
-    -- retourne : Unbounded_String
-    function Nom_via_chemin(F_chemin: in Unbounded_String) return Unbounded_String;
 
     -- procedure Creer_dossier : crée un dossier dans le SGF
     -- params: F_sgf: in out SGF

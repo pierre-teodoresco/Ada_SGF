@@ -169,21 +169,6 @@ package body P_SGF is
 
     end Rechercher_via_chemin;
 
-    -- fonction Nom_via_chemin : retourne le nom d'un élément via un chemin
-    -- params: F_chemin: in Unbounded_String
-    -- retourne : Unbounded_String
-    function Nom_via_chemin(F_chemin: in Unbounded_String) return Unbounded_String is
-    begin
-        -- parcourir le chemin à l'envers jusqu'à trouver un /
-        for i in reverse 1..Length(F_chemin) loop
-            if To_String(F_chemin)(i) = '/' then
-                return Unbounded_Slice(F_chemin, i+1, Length(F_chemin));
-            end if;
-        end loop;
-        -- si on ne trouve pas de /, on retourne le chemin
-        return F_chemin;
-    end Nom_via_chemin;
-
     -- procedure Creer_dossier : crée un dossier dans le SGF
     -- params: F_arbre: in out Arbre
     --         F_Nom: in Unbounded_String
