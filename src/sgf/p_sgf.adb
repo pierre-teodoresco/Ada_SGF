@@ -95,12 +95,12 @@ package body P_SGF is
 
     -- Sous-programmes
 
-   -- fonction Rechercher_noeud : recherche un element à partir d'un chemin
+   -- fonction Rechercher_sgf : recherche un element à partir d'un chemin
     -- params: F_sgf: in SGF
     --         F_chemin: in Unbounded_String
     --         F_est_createur: in Boolean
     -- retourne : Arbre
-    function Rechercher_noeud(F_sgf: in SGF; F_chemin: in Unbounded_String; F_est_createur: in Boolean) return Arbre is
+    function Rechercher_sgf(F_sgf: in SGF; F_chemin: in Unbounded_String; F_est_createur: in Boolean) return Arbre is
         dfs: Liste_String := Init_liste;
         est_relatif: Boolean := True;
     begin
@@ -116,84 +116,46 @@ package body P_SGF is
             Pop_back(dfs);
         end if;
 
-
-
-        
-    end Rechercher_noeud;
-
-    -- fonction Rechercher : recherche un élément dans le SGF
-    -- params: F_sgf: in SGF                       - SGF dans lequel rechercher
-    --         F_chemin: in Unbounded_String       - chemin de l'élément à rechercher
-    --         F_est_createur: in Boolean          - True si la fonction est appelée par une fonction de création
-    -- retourne : Arbre 
-    function Rechercher_sgf(F_sgf: in SGF; F_chemin: in Unbounded_String; F_est_createur: in Boolean) return Arbre is
-        Temp_arbre: Arbre := F_sgf.Courrant;
-        Temp_chemin: Unbounded_String := F_chemin;
-    begin
-        -- Si le chemin est vide, on retourne le dossier courant
-        if Length(F_chemin) = 0 then
-            return F_sgf.Courrant;   
-        end if;
-
-        -- Si la commande est un createur, on supprime le dernier élément du chemin
-        -- pour chercher uniquement son parent
-        if F_est_createur then
-            -- supprimer le dernier element du chemin 
-            Temp_chemin := Unbounded_Slice(Temp_chemin, 1, Length(Temp_chemin) - Length(Nom_via_chemin(Temp_chemin)));
-        end if;
-
-        Put_Line(To_String(Temp_chemin));
-
-        -- Si le chemin commence par un /, on part de la racine
-        if To_String(F_chemin)(1) = '/' then
-            Temp_arbre := F_sgf.Racine;
-            Temp_chemin := Unbounded_Slice(Temp_chemin, 2, Length(Temp_chemin));
-
-        elsif To_String(F_chemin)(1..2) = "./" then
-            -- Si le chemin commence par ./, on part du dossier courant
-            Temp_chemin := Unbounded_Slice(Temp_chemin, 3, Length(Temp_chemin));
-        end if;
-
-        return Rechercher_via_chemin(Temp_arbre, Temp_chemin);
+        return Rechercher_via_liste(F_sgf, dfs, est_relatif);
         
     end Rechercher_sgf;
 
-    -- fonction Rechercher_via_chemin : recherche un élément dans l'arbre via un chemin
-    -- params: F_arbre: in Arbre
-    --         F_chemin: in Unbounded_String
+    -- fonction Rechercher_via_liste : recherche un élément à partir d'une liste de noms
+    -- params: F_sgf: in SGF
+    --         F_dfs: in Liste_String
+    --         F_est_relatif: in Boolean
     -- retourne : Arbre
-    function Rechercher_via_chemin(F_arbre: in Arbre; F_chemin: in Unbounded_String) return Arbre is
-        Sous_arbre: Arbre;
-        Nom_pere: Unbounded_String;
-        Nom_fils: Unbounded_String;
+    function Rechercher_via_liste(F_sgf: in SGF; F_dfs: in Liste_String; F_est_relatif: in Boolean) return Arbre is
     begin
-        -- Si le chemin est vide, on retourne l'arbre
-        if Length(F_chemin) = 0 then
-            return F_arbre;
-
-        elsif Length(F_chemin) = 2 and To_String(F_chemin)(1..2) = ".." then
-            -- Si le chemin est .., on retourne le parent
-            return Pere(F_arbre);
-
-        elsif To_String(F_chemin)(1..2) = ".." then
-            -- Si le chemin commence par .., on cherche dans le parent
-            return Rechercher_via_chemin(Pere(F_arbre), Unbounded_Slice(F_chemin, 3, Length(F_chemin)));
-
-        elsif To_String(F_chemin)(1) /= '/' then
-            -- Si le chemin commence par un /, on cherche dans le parent
-            return Arbre_DF.Rechercher(F_arbre, DF'(Nom => F_chemin, Flag => Dossier, Perm => 0, Taille => 0));
-        
+        if F_est_relatif then
+            return Rechercher_df(F_sgf.Courrant, F_dfs);
         else
-            -- Sinon, on cherche dans le sous-arbre
-            Nom_pere := Unbounded_Slice(F_chemin, 1, Index(F_chemin, "/")-1);
-            Sous_arbre := Arbre_DF.Rechercher(F_arbre, DF'(Nom => Nom_pere, Flag => Dossier, Perm => 0, Taille => 0));
-
-            Nom_fils := Unbounded_Slice(F_chemin, Index(F_chemin, "/")+1, Length(F_chemin));
-            return Rechercher_via_chemin(Sous_arbre, Nom_fils);
-
+            return Rechercher_df(F_sgf.Racine, F_dfs);
         end if;
+    end Rechercher_via_liste;
 
-    end Rechercher_via_chemin;
+    -- fonction Rechercher_df : recherche un élément à partir d'un chemin absolu ou relatif
+    -- params: F_arbre: in Arbre
+    --         F_dfs: in Liste_String
+    -- retourne : Arbre
+    function Rechercher_df(F_arbre: in Arbre; F_dfs: in Liste_String) return Arbre is
+        tmp_arbre: Arbre := F_arbre;
+    begin
+        for i in 1..Taille_liste(F_dfs) loop
+            -- on verifie si on doit prendre le pere sur ".."
+            if Get_liste(F_dfs, i) = ".." then
+                tmp_arbre := Pere(tmp_arbre);
+            else
+                -- on recherche l'element
+                tmp_arbre := Rechercher(F_arbre, Get_liste(tmp_liste, i));
+                -- si l'element n'existe pas ou si on est sur un fichier sans être à la fin du chemin on leve une exception
+                if tmp_arbre = null or else (i < Taille_liste(F_dfs) and tmp_arbre.all.Contenu.Flag = Fichier) then
+                    raise PATH_NOT_EXIST;
+                end if;
+            end if;
+        end loop;
+        return tmp_arbre;
+    end Rechercher_df;
 
     -- procedure Creer_dossier : crée un dossier dans le SGF
     -- params: F_arbre: in out Arbre

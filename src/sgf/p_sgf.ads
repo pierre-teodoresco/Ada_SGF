@@ -22,6 +22,9 @@ package P_SGF is
         Option: Options;
         Args: Liste_String;
     end record;
+
+    -- Exceptions
+    PATH_NOT_EXIST : exception;
     
     -- Sous-programmes
 
@@ -48,13 +51,6 @@ private
         Format: Unbounded_String;
     end record;
 
-    type SFGS;
-    type SFG_Liste is access SFGS;
-    type SFGS is record
-        Valeur: SGF;
-        Suivant: SFG_Liste;
-    end record;
-
     procedure Afficher_DF_complet(F_df: in DF);
     procedure Afficher_DF_simple(F_df: in DF);
 
@@ -63,25 +59,25 @@ private
 
     -- Sous-programmes
 
-    -- fonction Rechercher_noeud : recherche un element à partir d'un chemin
+    -- fonction Rechercher_sgf : recherche un element à partir d'un chemin
     -- params: F_sgf: in SGF
     --         F_chemin: in Unbounded_String
     --         F_est_createur: in Boolean
     -- retourne : Arbre
-    function Rechercher_noeud(F_sgf: in SGF; F_chemin: in Unbounded_String; F_est_createur: in Boolean) return Arbre;
-
-    -- fonction Rechercher : recherche un élément dans le SGF
-    -- params: F_sgf: in SGF                        - SGF dans lequel rechercher
-    --         F_chemin: in Unbounded_String        - chemin de l'élément à rechercher
-    --         F_est_createur: in Boolean           - True si la fonction est appelée par une fonction de création
-    -- retourne : Arbre 
     function Rechercher_sgf(F_sgf: in SGF; F_chemin: in Unbounded_String; F_est_createur: in Boolean) return Arbre;
 
-    -- fonction Rechercher_via_chemin : recherche un élément dans l'arbre via un chemin
-    -- params: F_arbre: in Arbre
-    --         F_chemin: in Unbounded_String
+    -- fonction Rechercher_via_liste : recherche un élément à partir d'une liste de noms
+    -- params: F_sgf: in SGF
+    --         F_dfs: in Liste_String
+    --         F_est_relatif: in Boolean
     -- retourne : Arbre
-    function Rechercher_via_chemin(F_arbre: in Arbre; F_chemin: in Unbounded_String) return Arbre;
+    function Rechercher_via_liste(F_sgf: in SGF; F_dfs: in Liste_String; F_est_relatif: in Boolean) return Arbre;
+
+    -- fonction Rechercher_df : recherche un élément à partir d'un chemin absolu
+    -- params: F_arbre: in Arbre
+    --         F_dfs: in Liste_String
+    -- retourne : Arbre
+    function Rechercher_df(F_arbre: in Arbre; F_dfs: in Liste_String) return Arbre;
 
     -- procedure Creer_dossier : crée un dossier dans le SGF
     -- params: F_sgf: in out SGF
