@@ -12,6 +12,10 @@ package P_Chaine is
         Suivant: Liste_String;
     end record;
 
+    -- Exceptions
+    LISTE_VIDE: exception;
+    OUT_OF_BOUNDS: exception;
+
     -- Sous-programmes
 
     -- fonction Init_liste : initialise une liste de chaines
@@ -22,6 +26,12 @@ package P_Chaine is
     -- params: F_liste: in Liste_String    - liste à tester
     -- retourne : Integer
     function Taille_liste(F_liste: in Liste_String) return Integer;
+
+    -- fonction Get_liste : retourne la chaine à l'indice donné
+    -- params: F_liste: in Liste_String    - liste à tester
+    --         F_indice: in Integer        - indice de la chaine à retourner
+    -- retourne : Unbounded_String
+    function Get_liste(F_liste: in Liste_String; F_indice: in Integer) return Unbounded_String;
 
     -- procedure Detruire_liste : détruit une liste de chaines
     -- params: F_liste: in out Liste_String    - liste à détruire
@@ -42,9 +52,13 @@ package P_Chaine is
     -- retourne : Liste_String
     function Separer_chemin(F_chemin: in Unbounded_String) return Liste_String;
 
-    -- procedure pop : supprime le dernier élément d'une liste de chaines
+    -- procedure Pop_back : supprime le dernier élément d'une liste de chaines
     -- params: F_liste: in out Liste_String    - liste à modifier
-    procedure Pop(F_liste: in out Liste_String);
+    procedure Pop_back(F_liste: in out Liste_String);
+
+    -- procedure Pop_front : supprime le premier élément d'une liste de chaines
+    -- params: F_liste: in out Liste_String    - liste à modifier
+    procedure Pop_front(F_liste: in out Liste_String);
 
     -- tests
 

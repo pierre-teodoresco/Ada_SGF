@@ -63,10 +63,12 @@ private
 
     -- Sous-programmes
 
-    -- fonction Rechercher_noeud : recherche un element à partir d'une liste_string
+    -- fonction Rechercher_noeud : recherche un element à partir d'un chemin
     -- params: F_sgf: in SGF
-    --         F_chemin: in Liste_String
+    --         F_chemin: in Unbounded_String
     --         F_est_createur: in Boolean
+    -- retourne : Arbre
+    function Rechercher_noeud(F_sgf: in SGF; F_chemin: in Unbounded_String; F_est_createur: in Boolean) return Arbre;
 
     -- fonction Rechercher : recherche un élément dans le SGF
     -- params: F_sgf: in SGF                        - SGF dans lequel rechercher

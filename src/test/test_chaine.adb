@@ -17,7 +17,16 @@ begin
     pragma Assert(Taille_liste(ll_chaine) = 2);
     afficher_liste(ll_chaine);
 
-    Pop(ll_chaine);
+    pragma Assert(Get_liste(ll_chaine, 1) = To_Unbounded_String("tata"));
+    pragma Assert(Get_liste(ll_chaine, 2) = To_Unbounded_String("toto.txt"));
+    pragma Assert(Get_liste(ll_chaine, 3) = To_Unbounded_String(""));
+
+    Pop_back(ll_chaine);
     pragma Assert(Taille_liste(ll_chaine) = 1);
+
+    Pop_front(ll_chaine);
+    pragma Assert(Taille_liste(ll_chaine) = 0);
+
+    pragma Assert(Get_liste(ll_chaine, 1) = To_Unbounded_String(""));
 
 end Test_Chaine;

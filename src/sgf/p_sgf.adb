@@ -95,6 +95,32 @@ package body P_SGF is
 
     -- Sous-programmes
 
+   -- fonction Rechercher_noeud : recherche un element à partir d'un chemin
+    -- params: F_sgf: in SGF
+    --         F_chemin: in Unbounded_String
+    --         F_est_createur: in Boolean
+    -- retourne : Arbre
+    function Rechercher_noeud(F_sgf: in SGF; F_chemin: in Unbounded_String; F_est_createur: in Boolean) return Arbre is
+        dfs: Liste_String := Init_liste;
+        est_relatif: Boolean := True;
+    begin
+        dfs := Separer_chemin(F_chemin);
+
+        if Taille_liste(dfs) = 0 then
+            return F_sgf.Courrant;
+        elsif Get_liste(dfs, 1) = "/" then
+            est_relatif := False;
+        end if;
+        
+        if F_est_createur then
+            Pop_back(dfs);
+        end if;
+
+
+
+        
+    end Rechercher_noeud;
+
     -- fonction Rechercher : recherche un élément dans le SGF
     -- params: F_sgf: in SGF                       - SGF dans lequel rechercher
     --         F_chemin: in Unbounded_String       - chemin de l'élément à rechercher

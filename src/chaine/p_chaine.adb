@@ -18,6 +18,28 @@ package body P_Chaine is
         end if;
     end Taille_liste;
 
+    function Get_liste(F_liste: in Liste_String; F_indice: in Integer) return Unbounded_String is
+    begin
+        if F_liste = null then
+            raise LISTE_VIDE;
+        elsif F_indice > Taille_liste(F_liste) then
+            raise OUT_OF_BOUNDS;
+        else
+            if F_indice = 1 then
+                return F_liste.Valeur;
+            else
+                return Get_liste(F_liste.Suivant, F_indice - 1);
+            end if;
+        end if;
+    exception
+        when LISTE_VIDE =>
+            Put_Line("La liste est vide");
+            return To_Unbounded_String("");
+        when OUT_OF_BOUNDS =>
+            Put_Line("L'indice est trop grand");
+            return To_Unbounded_String("");
+    end Get_liste;
+
     procedure Detruire_liste(F_liste: in out Liste_String) is 
     begin
         if F_liste /= null then
@@ -52,7 +74,7 @@ package body P_Chaine is
         -- si le chemin est absolu ajouter une chaine vide en premier élément
         -- et enlever le premier /
         if Est_absolu(chemin) then
-            Ajouter_liste(liste, To_Unbounded_String(""));
+            Ajouter_liste(liste, To_Unbounded_String("/"));
             chemin := Unbounded_Slice(chemin, 2, Length(chemin));
         end if;
 
@@ -79,17 +101,24 @@ package body P_Chaine is
 
     end Separer_chemin;
 
-    procedure Pop(F_liste: in out Liste_String) is
+    procedure Pop_back(F_liste: in out Liste_String) is
     begin
         if F_liste /= null then
             if F_liste.Suivant /= null then
-                pop(F_liste.Suivant);
+                Pop_back(F_liste.Suivant);
             else
                 Liberer(F_liste);
                 F_liste := null;
             end if;
         end if;
-    end Pop;
+    end Pop_back;
+
+    procedure Pop_front(F_liste: in out Liste_String) is
+    begin
+        if F_liste /= null then
+            F_liste := F_liste.Suivant;
+        end if;
+    end Pop_front;
 
     procedure Afficher_liste(F_liste: in Liste_String) is 
     begin
