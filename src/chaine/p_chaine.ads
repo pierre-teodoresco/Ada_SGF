@@ -42,6 +42,10 @@ package P_Chaine is
     -- retourne : Liste_String
     function Separer_chemin(F_chemin: in Unbounded_String) return Liste_String;
 
+    -- procedure pop : supprime le dernier élément d'une liste de chaines
+    -- params: F_liste: in out Liste_String    - liste à modifier
+    procedure Pop(F_liste: in out Liste_String);
+
     -- tests
 
     -- procedure afficher_liste : affiche une liste de chaines

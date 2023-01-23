@@ -17,4 +17,7 @@ begin
     pragma Assert(Taille_liste(ll_chaine) = 2);
     afficher_liste(ll_chaine);
 
+    Pop(ll_chaine);
+    pragma Assert(Taille_liste(ll_chaine) = 1);
+
 end Test_Chaine;

@@ -79,6 +79,18 @@ package body P_Chaine is
 
     end Separer_chemin;
 
+    procedure Pop(F_liste: in out Liste_String) is
+    begin
+        if F_liste /= null then
+            if F_liste.Suivant /= null then
+                pop(F_liste.Suivant);
+            else
+                Liberer(F_liste);
+                F_liste := null;
+            end if;
+        end if;
+    end Pop;
+
     procedure Afficher_liste(F_liste: in Liste_String) is 
     begin
         if F_liste /= null then

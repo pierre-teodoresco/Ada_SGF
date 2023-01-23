@@ -64,6 +64,9 @@ private
     -- Sous-programmes
 
     -- fonction Rechercher_noeud : recherche un element à partir d'une liste_string
+    -- params: F_sgf: in SGF
+    --         F_chemin: in Liste_String
+    --         F_est_createur: in Boolean
 
     -- fonction Rechercher : recherche un élément dans le SGF
     -- params: F_sgf: in SGF                        - SGF dans lequel rechercher
