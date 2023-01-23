@@ -24,7 +24,7 @@ package P_SGF is
     end record;
 
     -- Exceptions
-    PATH_NOT_EXIST : exception;
+    PATH_NOT_EXISTS: exception;
     
     -- Sous-programmes
 

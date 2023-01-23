@@ -63,6 +63,8 @@ package body P_SGF is
                 -- TODO : archiver un élément
                 null;
         end case;
+    exception
+        when PATH_NOT_EXISTS => Put_Line("Le chemin n'existe pas");
     end Lancer;
 
     -- PRIVATE
@@ -140,17 +142,22 @@ package body P_SGF is
     -- retourne : Arbre
     function Rechercher_df(F_arbre: in Arbre; F_dfs: in Liste_String) return Arbre is
         tmp_arbre: Arbre := F_arbre;
+        tmp_df: DF;
     begin
         for i in 1..Taille_liste(F_dfs) loop
             -- on verifie si on doit prendre le pere sur ".."
             if Get_liste(F_dfs, i) = ".." then
                 tmp_arbre := Pere(tmp_arbre);
             else
+                -- on cree la df
+                tmp_df := DF'(Nom => Get_liste(F_dfs, i), Flag => Dossier, Perm => 777, Taille => 0);
                 -- on recherche l'element
-                tmp_arbre := Rechercher(F_arbre, Get_liste(tmp_liste, i));
+                tmp_arbre := Rechercher(F_arbre, tmp_df);
+                -- on recupere le contenu de l'element
+                tmp_df := Contenu(tmp_arbre);
                 -- si l'element n'existe pas ou si on est sur un fichier sans être à la fin du chemin on leve une exception
-                if tmp_arbre = null or else (i < Taille_liste(F_dfs) and tmp_arbre.all.Contenu.Flag = Fichier) then
-                    raise PATH_NOT_EXIST;
+                if Arbre_DF.Est_vide(tmp_arbre) or else (i < Taille_liste(F_dfs) and tmp_df.Flag = Fichier) then
+                    raise PATH_NOT_EXISTS;
                 end if;
             end if;
         end loop;
