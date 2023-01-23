@@ -1,4 +1,4 @@
-with Ada.Text_IO;
+with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with P_Chaine; use P_Chaine;
 
@@ -11,6 +11,10 @@ begin
 
     ll_chaine := Separer_chemin(To_Unbounded_String("/tata/toto.txt"));
     pragma Assert(Taille_liste(ll_chaine) = 3);
+    afficher_liste(ll_chaine);
+
+    ll_chaine := Separer_chemin(To_Unbounded_String("tata/toto.txt"));
+    pragma Assert(Taille_liste(ll_chaine) = 2);
     afficher_liste(ll_chaine);
 
 end Test_Chaine;
