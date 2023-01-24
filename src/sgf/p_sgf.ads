@@ -97,6 +97,11 @@ private
     -- params: F_arbre: in Arbre
     procedure Afficher_complet(F_arbre: in Arbre);
 
+    -- procedure Changer_repertoire : change le répertoire courant du SGF
+    -- params: F_sgf: in out SGF
+    --         F_arbre: in Arbre
+    procedure Changer_repertoire(F_sgf: in out SGF; F_arbre: in Arbre);
+
     -- procedure Supprimer : supprime un élément du SGF
     -- params: F_arbre: in out Arbre
     --         F_element: in Arbre

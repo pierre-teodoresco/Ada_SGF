@@ -50,8 +50,9 @@ package body P_SGF is
                     Afficher_complet(temp_arbre);
                 end if;
             when cd =>
-                -- TODO : changer de dossier courant
-                null;
+                chemin := F_cmd.Args.all.Valeur;
+                temp_arbre := Rechercher_sgf(F_sgf, chemin, False);
+                Changer_repertoire(F_sgf, temp_arbre);
             when rm => 
                 -- TODO : supprimer un élément
                 null;
@@ -197,6 +198,14 @@ package body P_SGF is
     begin
         Afficher_Arbre_SGF_complet(F_arbre);
     end Afficher_complet;
+
+    -- procedure Changer_repertoire : change le répertoire courant du SGF
+    -- params: F_sgf: in out SGF
+    --         F_arbre: in Arbre
+    procedure Changer_repertoire(F_sgf: in out SGF; F_arbre: in Arbre) is
+    begin
+        F_sgf.Courrant := F_arbre;
+    end Changer_repertoire;
 
     -- procedure Supprimer : supprime un élément du SGF
     -- params: F_Arbre: in out Arbre

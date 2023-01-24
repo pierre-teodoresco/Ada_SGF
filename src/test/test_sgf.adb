@@ -1,6 +1,7 @@
 with P_SGF; use P_SGF;
 with P_Chaine; use P_Chaine;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Text_IO; use Ada.Text_IO;
 
 procedure Test_SGF is
     System: SGF;
@@ -26,8 +27,26 @@ begin
     arg := new Noeud_String'(Valeur => To_Unbounded_String("."), Suivant => null);
     Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => none, Args => arg));
 
+    New_Line;
+
     -- Affichage du contenu du répertoire courant avec les détails
     arg := new Noeud_String'(Valeur => To_Unbounded_String("tata"), Suivant => null);
     Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => l, Args => arg));
+
+    -- Changer le répertoire courant pour le dossier "tata"
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("tata"), Suivant => null);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => cd, Option => none, Args => arg));
+
+    -- Affichage du contenu du répertoire courant
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("."), Suivant => null);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => none, Args => arg));
+
+    New_Line;
+
+    -- Affichage du contenu de la racine à partir du répertoire courant
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("/"), Suivant => null);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => none, Args => arg));
+
+    New_Line;
 
 end Test_SGF;
