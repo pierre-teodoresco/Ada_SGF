@@ -24,4 +24,8 @@ begin
     -- Affichage du contenu du répertoire courant
     Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => none, Args => null));
 
+    -- Affichage du contenu du répertoire courant avec les détails
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("tata"), Suivant => null);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => l, Args => arg));
+
 end Test_SGF;

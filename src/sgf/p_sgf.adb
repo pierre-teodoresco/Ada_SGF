@@ -25,7 +25,7 @@ package body P_SGF is
     --         F_sgf: in SGF        - SGF sur lequel exécuter la commande
     procedure Lancer(F_sgf: in out SGF; F_cmd: in Commande) is
         temp_arbre: Arbre;
-        chemin: Unbounded_String;
+        chemin: Unbounded_String := To_Unbounded_String("");
     begin
         -- Agir en fonction de la commande
         case F_cmd.Nom is
@@ -41,11 +41,17 @@ package body P_SGF is
                 temp_arbre := Rechercher_sgf(F_sgf, chemin, True);
                 Creer_dossier(temp_arbre, Nom_via_chemin(chemin));
             when ls =>
+                if F_cmd.Args = null then
+                    chemin := To_Unbounded_String(".");
+                else
+                    chemin := F_cmd.Args.all.Valeur;
+                end if;
+                temp_arbre := Rechercher_sgf(F_sgf, chemin, False);
                 if F_cmd.Option = none then
-                    Afficher(F_sgf);
+                    Afficher(temp_arbre);
                 end if;
                 if F_cmd.Option = l then
-                    Afficher_complet(F_sgf);
+                    Afficher_complet(temp_arbre);
                 end if;
             when cd =>
                 -- TODO : changer de dossier courant
@@ -113,13 +119,12 @@ package body P_SGF is
         elsif Get_liste(dfs, 1) = "/" then
             est_relatif := False;
         end if;
-        
+
         if F_est_createur then
             Pop_back(dfs);
         end if;
 
         return Rechercher_via_liste(F_sgf, dfs, est_relatif);
-        
     end Rechercher_sgf;
 
     -- fonction Rechercher_via_liste : recherche un élément à partir d'une liste de noms
@@ -161,7 +166,10 @@ package body P_SGF is
                 end if;
             end if;
         end loop;
+
         return tmp_arbre;
+    exception
+        when EMPTY_TREE => return F_arbre;
     end Rechercher_df;
 
     -- procedure Creer_dossier : crée un dossier dans le SGF
@@ -181,17 +189,17 @@ package body P_SGF is
     end Creer_fichier;
 
     -- procedure Afficher : affiche l'architecture du SGF
-    -- params: F_Arbre: in Arbre
-    procedure Afficher(F_sgf: in SGF) is
+    -- params: F_arbre: in Arbre
+    procedure Afficher(F_arbre: in Arbre) is
     begin
-        Afficher_Arbre_SGF_simple(Fils(F_sgf.Courrant));
+        Afficher_Arbre_SGF_simple(F_arbre);
     end Afficher;
 
     -- procedure Afficher_complet : affiche l'architecture du SGF avec les détails
-    -- params: F_sgf: in SGF
-    procedure Afficher_complet(F_sgf: in SGF) is
+    -- params: F_arbre: in SGF
+    procedure Afficher_complet(F_arbre: in Arbre) is
     begin
-        Afficher_Arbre_SGF_complet(F_sgf.Courrant);
+        Afficher_Arbre_SGF_complet(F_arbre);
     end Afficher_complet;
 
     -- procedure Supprimer : supprime un élément du SGF

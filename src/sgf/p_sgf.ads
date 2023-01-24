@@ -91,11 +91,11 @@ private
 
     -- procedure Afficher : affiche l'architecture du SGF
     -- params: F_arbre: in Arbre
-    procedure Afficher(F_sgf: in SGF);
+    procedure Afficher(F_arbre: in Arbre);
 
     -- procedure Afficher_complet : affiche l'architecture du SGF avec les détails
-    -- params: F_sgf: in SGF
-    procedure Afficher_complet(F_sgf: in SGF);
+    -- params: F_arbre: in Arbre
+    procedure Afficher_complet(F_arbre: in Arbre);
 
     -- procedure Supprimer : supprime un élément du SGF
     -- params: F_arbre: in out Arbre

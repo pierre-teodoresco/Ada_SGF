@@ -27,7 +27,11 @@ package body P_Arbre is
     -- résultat: père du noeud
     function Pere(F_noeud: in Arbre) return Arbre is
     begin
-        return F_noeud.all.Pere;
+        if Est_vide(F_noeud) then
+            raise EMPTY_TREE;
+        else
+            return F_noeud.all.Pere;
+        end if;
     end Pere;
 
     -- fonction Fils: retourne le fils d'un noeud
@@ -35,7 +39,11 @@ package body P_Arbre is
     -- résultat: fils du noeud
     function Fils(F_noeud: in Arbre) return Arbre is
     begin
-        return F_noeud.all.Fils;
+        if Est_vide(F_noeud) then
+            raise EMPTY_TREE;
+        else
+            return F_noeud.all.Fils;
+        end if;
     end Fils;
 
     -- fonction Frere: retourne le frère d'un noeud
@@ -43,7 +51,11 @@ package body P_Arbre is
     -- résultat: frère du noeud
     function Frere(F_noeud: in Arbre) return Arbre is
     begin
-        return F_noeud.all.Frere;
+        if Est_vide(F_noeud) then
+            raise EMPTY_TREE;
+        else
+            return F_noeud.all.Frere;
+        end if;
     end Frere;
 
     -- fonction Contenu: retourne le contenu d'un noeud
@@ -51,7 +63,11 @@ package body P_Arbre is
     -- résultat: contenu du noeud
     function Contenu(F_noeud: in Arbre) return Type_Element is
     begin
-        return F_noeud.all.Contenu;
+        if Est_vide(F_noeud) then
+            raise EMPTY_TREE;
+        else
+            return F_noeud.all.Contenu;
+        end if;
     end Contenu;
 
     -- procedure Ajouter: ajoute un fils à la fin de la liste des fils d'un noeud
@@ -194,14 +210,14 @@ package body P_Arbre is
     --  procedure Afficher: affiche un arbre
     --  paramètres: F_arbre: arbre à afficher
     procedure Afficher(F_arbre: in Arbre) is
+        T_noeud: Arbre;
     begin
-        if Est_vide(F_arbre) then
-            null;
-        else
-            Afficher_contenu(F_arbre.all.Contenu);
-            Afficher(F_arbre.all.Frere);
-            Afficher(F_arbre.all.Fils);
-        end if;
+        -- parcours des fils du noeud
+        T_noeud := F_arbre.all.Fils;
+        while T_noeud /= null loop
+            Afficher_contenu(T_noeud.all.Contenu);
+            T_noeud := T_noeud.all.Frere;
+        end loop;
     end Afficher;
 
     -- procedure Detruire: détruit un arbre

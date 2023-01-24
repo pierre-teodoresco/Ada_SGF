@@ -9,6 +9,9 @@ package P_Arbre is
     -- types
     type Arbre is private;
 
+    -- Exceptions
+    EMPTY_TREE: exception;
+
     -- Sous-programmes
 
     -- fonction Creer: crée un arbre
