@@ -22,6 +22,22 @@ package body P_Arbre is
         return F_arbre = null;
     end Est_vide;
 
+    -- fonction Est_feuille: teste si un noeud est une feuille
+    -- paramètres: F_noeud: noeud à tester
+    -- résultat: vrai si le noeud est une feuille, faux sinon
+    function Est_feuille(F_noeud: in Arbre) return Boolean is
+    begin
+        if Est_vide(F_noeud) then
+            raise EMPTY_TREE;
+        else
+            return F_noeud.Fils = null;
+        end if;
+    exception
+        when EMPTY_TREE => 
+            Put_Line("Erreur: le noeud est vide");
+            return false;
+    end Est_feuille;
+
     -- fonction Pere: retourne le père d'un noeud
     -- paramètres: F_noeud: noeud dont on veut le père
     -- résultat: père du noeud

@@ -34,15 +34,15 @@ package body P_SGF is
                 null;
             when touch =>
                 chemin := F_cmd.Args.all.Valeur;
-                temp_arbre := Rechercher_sgf(F_sgf, chemin, True);
+                temp_arbre := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => True);
                 Creer_fichier(temp_arbre, Nom_via_chemin(chemin));
             when mkdir =>
                 chemin := F_cmd.Args.all.Valeur;
-                temp_arbre := Rechercher_sgf(F_sgf, chemin, True);
+                temp_arbre := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => True);
                 Creer_dossier(temp_arbre, Nom_via_chemin(chemin));
             when ls =>
                 chemin := F_cmd.Args.all.Valeur;
-                temp_arbre := Rechercher_sgf(F_sgf, chemin, False);
+                temp_arbre := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => False);
                 if F_cmd.Option = none then
                     Afficher(temp_arbre);
                 end if;
@@ -51,11 +51,12 @@ package body P_SGF is
                 end if;
             when cd =>
                 chemin := F_cmd.Args.all.Valeur;
-                temp_arbre := Rechercher_sgf(F_sgf, chemin, False);
+                temp_arbre := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => False);
                 Changer_repertoire(F_sgf, temp_arbre);
             when rm => 
-                -- TODO : supprimer un élément
-                null;
+                chemin := F_cmd.Args.all.Valeur;
+                temp_arbre := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => False);
+                Supprimer(temp_arbre);
             when cp =>
                 -- TODO : copier un élément
                 null;
@@ -208,12 +209,17 @@ package body P_SGF is
     end Changer_repertoire;
 
     -- procedure Supprimer : supprime un élément du SGF
-    -- params: F_Arbre: in out Arbre
-    --         F_Element: in Arbre
-    procedure Supprimer(F_Arbre: in out Arbre; F_Element: in Arbre) is
+    -- params: F_arbre: in out Arbre
+    procedure Supprimer(F_arbre: in out Arbre) is
     begin
-        -- TODO : supprimer un élément
-        null;
+        -- Si l'arbre n'est pas une feuille et que c'est un dossier on leve une exception
+        if not Arbre_DF.Est_feuille(F_arbre) and then Contenu(F_arbre).Flag = Dossier then
+            raise DIRECTORY_NOT_EMPTY;
+        else
+            Arbre_DF.Supprimer(F_arbre);
+        end if;
+    exception
+        when DIRECTORY_NOT_EMPTY => Put_Line("Suppression impossible : le dossier n'est pas vide");
     end Supprimer;
     
     -- procedure Deplacer : déplace un élément du SGF

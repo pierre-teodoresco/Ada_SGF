@@ -11,6 +11,11 @@ begin
     System := Creer;
 
     -- Création d'un fichier
+    Put_Line("------------------");
+    Put_Line("touch test.txt; mkdir tata; touch tata/toto.png; ls .; ls -l tata");
+    Put_Line("------------------");
+    New_Line;
+
     arg := new Noeud_String'(Valeur => To_Unbounded_String("test.txt"), Suivant => null);
     Lancer(F_sgf => System, F_cmd => Commande'(Nom => touch, Option => none, Args => arg));
 
@@ -34,6 +39,11 @@ begin
     Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => l, Args => arg));
 
     -- Changer le répertoire courant pour le dossier "tata"
+    Put_Line("------------------");
+    Put_Line("cd tata; ls .; ls /");
+    Put_Line("------------------");
+    New_Line;
+
     arg := new Noeud_String'(Valeur => To_Unbounded_String("tata"), Suivant => null);
     Lancer(F_sgf => System, F_cmd => Commande'(Nom => cd, Option => none, Args => arg));
 
@@ -46,6 +56,39 @@ begin
     -- Affichage du contenu de la racine à partir du répertoire courant
     arg := new Noeud_String'(Valeur => To_Unbounded_String("/"), Suivant => null);
     Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => none, Args => arg));
+
+    New_Line;
+
+    -- Supprimer le fichier "/test.txt"
+    Put_Line("------------------");
+    Put_Line("rm /test.txt; ls /; cd /; rm tata; rm toto.png; ls -l");
+    Put_Line("------------------");
+    New_Line;
+
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("/test.txt"), Suivant => null);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => rm, Option => none, Args => arg));
+
+    -- Affichage du contenu de la racine à partir du répertoire courant
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("/"), Suivant => null);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => none, Args => arg));
+
+    New_Line;
+
+    -- Revenir à la racine
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("/"), Suivant => null);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => cd, Option => none, Args => arg));
+
+    -- Supprimer le dossier "tata"
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("tata"), Suivant => null);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => rm, Option => none, Args => arg));
+
+    -- Supprimer le fichier "toto.png"
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("tata/toto.png"), Suivant => null);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => rm, Option => none, Args => arg));
+
+    -- Affichage du contenu du répertoire courant avec les détails
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("/tata"), Suivant => null);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => l, Args => arg));
 
     New_Line;
 

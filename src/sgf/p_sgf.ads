@@ -25,6 +25,7 @@ package P_SGF is
 
     -- Exceptions
     PATH_NOT_EXISTS: exception;
+    DIRECTORY_NOT_EMPTY: exception;
     
     -- Sous-programmes
 
@@ -104,8 +105,7 @@ private
 
     -- procedure Supprimer : supprime un élément du SGF
     -- params: F_arbre: in out Arbre
-    --         F_element: in Arbre
-    procedure Supprimer(F_arbre: in out Arbre; F_element: in Arbre);
+    procedure Supprimer(F_arbre: in out Arbre);
     
     -- procedure Deplacer : déplace un élément du SGF
     -- params: F_arbre: in out Arbre

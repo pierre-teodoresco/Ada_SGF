@@ -24,6 +24,11 @@ package P_Arbre is
     -- résultat: vrai si l'arbre est vide, faux sinon
     function Est_vide(F_Arbre: in Arbre) return Boolean;
 
+    -- fonction Est_feuille: teste si un noeud est une feuille
+    -- paramètres: F_noeud: noeud à tester
+    -- résultat: vrai si le noeud est une feuille, faux sinon
+    function Est_feuille(F_noeud: in Arbre) return Boolean;
+
     -- fonction Pere: retourne le père d'un noeud
     -- paramètres: F_noeud: noeud dont on veut le père
     -- résultat: père du noeud
