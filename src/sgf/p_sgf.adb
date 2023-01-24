@@ -11,7 +11,7 @@ package body P_SGF is
         Arbre_Racine: Arbre;
     begin
         -- Création du DF de la racine
-        Racine_DF := DF'(Nom => To_Unbounded_String("/"), Flag => Dossier, Perm => 777, Taille => 0);
+        Racine_DF := DF'(Nom => To_Unbounded_String(""), Flag => Dossier, Perm => 777, Taille => 0);
 
         -- Création de l'arbre de la racine
         Arbre_Racine := Arbre_DF.Creer(Racine_DF);
@@ -77,6 +77,18 @@ package body P_SGF is
     exception
         when PATH_NOT_EXISTS => Put_Line("Le chemin n'existe pas");
     end Lancer;
+
+    -- procedure Chemin_absolu : retourne le chemin absolu du répertoire courant
+    -- params: F_sgf: in SGF
+    procedure Print_chemin_absolu(F_sgf: in SGF) is
+    begin
+        if Est_racine(F_sgf.Courrant) then
+            Put("/");
+        else    
+            Chemin_absolu(F_sgf.Courrant);
+        end if;
+        New_Line;
+    end Print_chemin_absolu;
 
     -- PRIVATE
 
@@ -230,9 +242,9 @@ package body P_SGF is
     end Supprimer;
 
     -- procedure Copier : copie un élément du SGF
-    -- params: F_arbre: in out Arbre
+    -- params: F_arbre: in Arbre
     --         F_cible: in out Arbre
-    procedure Copier(F_arbre: in out Arbre; F_cible: in out Arbre) is
+    procedure Copier(F_arbre: in Arbre; F_cible: in out Arbre) is
         tmp_arbre: Arbre;
     begin
         -- vérifier si la cible est un dossier
@@ -240,21 +252,7 @@ package body P_SGF is
             raise NOT_A_DIRECTORY;
         end if;
 
-        tmp_arbre := Arbre_DF.Rechercher(F_cible, Contenu(F_arbre));
-
-        if Est_vide(tmp_arbre) then
-            tmp_arbre := Arbre_DF.Copier(F_arbre, F_nouveau_pere => F_cible);
-        else
-            tmp_arbre := Arbre_DF.Copier(F_arbre, F_nouveau_pere => F_cible);
-            Modifier_contenu(tmp_arbre, DF'(
-                    Nom => Contenu(tmp_arbre).Nom & "_copie", 
-                    Flag => Contenu(tmp_arbre).Flag, 
-                    Perm => Contenu(tmp_arbre).Perm, 
-                    Taille => Contenu(tmp_arbre).Taille
-                )
-            );
-        end if;
-
+        Arbre_DF.Copier(F_arbre, F_cible);
     exception
         when NOT_A_DIRECTORY => Put_Line("Copie impossible: La cible n'est pas un dossier");
         when EMPTY_TREE => Put_Line("Probleme lors de la copie");
@@ -278,5 +276,18 @@ package body P_SGF is
         -- TODO : archiver un élément
         null;
     end Archiver;
+
+    -- procedure Chemin_absolu : retourne le chemin absolu du repertoire courant
+    -- params: F_arbre: in Arbre
+    procedure Chemin_absolu(F_arbre: in Arbre) is
+        tmp_arbre: Arbre;
+    begin
+        if Est_racine(F_arbre) then
+            null;
+        else
+            Chemin_absolu(Pere(F_arbre));
+            Put("/" & To_String(Contenu(F_arbre).Nom));
+        end if;
+    end Chemin_absolu;
 
 end P_SGF;

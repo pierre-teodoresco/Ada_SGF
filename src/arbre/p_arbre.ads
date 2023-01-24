@@ -29,6 +29,16 @@ package P_Arbre is
     -- résultat: vrai si le noeud est une feuille, faux sinon
     function Est_feuille(F_noeud: in Arbre) return Boolean;
 
+    -- fonction Est_racine: teste si un noeud est la racine
+    -- paramètres: F_noeud: noeud à tester
+    -- résultat: vrai si le noeud est la racine, faux sinon
+    function Est_racine(F_noeud: in Arbre) return Boolean;
+
+    -- fonction clone : clone un arbre
+    -- paramètres: F_arbre: arbre à cloner
+    -- résultat: arbre cloné
+    function clone(F_arbre: in Arbre) return Arbre;
+
     -- fonction Pere: retourne le père d'un noeud
     -- paramètres: F_noeud: noeud dont on veut le père
     -- résultat: père du noeud
@@ -68,11 +78,10 @@ package P_Arbre is
     --             F_nouveau_pere: nouveau père du noeud
     procedure Deplacer(F_noeud: in out Arbre; F_nouveau_pere: in out Arbre);
 
-    -- fonction Copier: copie un arbre
+    -- procedure Copier: copie un arbre
     -- paramètres: F_arbre: arbre à copier
     --             F_nouveau_pere: nouveau père du noeud
-    -- résultat: arbre copié
-    function Copier(F_arbre: in Arbre; F_nouveau_pere: in out Arbre) return Arbre;
+    procedure Copier(F_arbre: in Arbre; F_nouveau_pere: in out Arbre);
 
     -- procedure Rechercher: recherche un élément dans un arbre
     -- paramètres: F_arbre: arbre dans lequel on recherche

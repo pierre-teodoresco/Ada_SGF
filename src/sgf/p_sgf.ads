@@ -39,6 +39,10 @@ package P_SGF is
     --        F_sgf: in SGF - SGF sur lequel exécuter la commande
     procedure Lancer(F_sgf: in out SGF; F_cmd: in Commande);
 
+    -- procedure Chemin_absolu : retourne le chemin absolu du répertoire courant
+    -- params: F_sgf: in SGF
+    procedure Print_chemin_absolu(F_sgf: in SGF);
+
 private
     -- packages
 
@@ -110,9 +114,9 @@ private
     procedure Supprimer(F_arbre: in out Arbre; F_est_recursif: in Boolean);
 
     -- procedure Copier : copie un élément du SGF
-    -- params: F_arbre: in out Arbre
+    -- params: F_arbre: in Arbre
     --         F_cible: in out Arbre
-    procedure Copier(F_arbre: in out Arbre; F_cible: in out Arbre);
+    procedure Copier(F_arbre: in Arbre; F_cible: in out Arbre);
     
     -- procedure Deplacer : déplace un élément du SGF
     -- params: F_arbre: in out Arbre
@@ -124,5 +128,9 @@ private
     -- params: F_arbre: in out Arbre
     --         F_element: in Arbre
     procedure Archiver(F_arbre: in out Arbre; F_element: in Arbre);
+
+    -- procedure Chemin_absolu : retourne le chemin absolu du repertoire courant
+    -- params: F_arbre: in Arbre
+    procedure Chemin_absolu(F_arbre: in Arbre);
 
 end P_SGF;

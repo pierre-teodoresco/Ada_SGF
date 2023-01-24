@@ -30,13 +30,44 @@ package body P_Arbre is
         if Est_vide(F_noeud) then
             raise EMPTY_TREE;
         else
-            return F_noeud.Fils = null;
+            return F_noeud.all.Fils = null;
         end if;
     exception
         when EMPTY_TREE => 
             Put_Line("Erreur: le noeud est vide");
             return false;
     end Est_feuille;
+
+    -- fonction Est_racine: teste si un noeud est la racine
+    -- paramètres: F_noeud: noeud à tester
+    -- résultat: vrai si le noeud est la racine, faux sinon
+    function Est_racine(F_noeud: in Arbre) return Boolean is
+    begin
+        if Est_vide(F_noeud) then
+            raise EMPTY_TREE;
+        else
+            return F_noeud.all.Pere = null;
+        end if;
+    exception
+        when EMPTY_TREE => 
+            Put_Line("Erreur: le noeud est vide");
+            return false;
+    end Est_racine;
+
+    -- fonction clone : clone un arbre
+    -- paramètres: F_arbre: arbre à cloner
+    -- résultat: arbre cloné
+    function clone(F_arbre: in Arbre) return Arbre is
+        T_noeud: Arbre;
+    begin
+        if Est_vide(F_arbre) then
+            return null;
+        else
+            T_noeud := Creer(F_arbre.all.Contenu);
+            T_noeud.all.Fils := clone(F_arbre.all.Fils);
+            return T_noeud;
+        end if;
+    end clone;
 
     -- fonction Pere: retourne le père d'un noeud
     -- paramètres: F_noeud: noeud dont on veut le père
@@ -190,22 +221,16 @@ package body P_Arbre is
         F_noeud.all.Pere := F_nouveau_pere;
     end Deplacer;
 
-    -- fonction Copier: copie un arbre
+    -- procedure Copier: copie un arbre
     -- paramètres: F_arbre: arbre à copier
     --             F_nouveau_pere: nouveau père du noeud
-    -- résultat: arbre copié
-    function Copier(F_arbre: in Arbre; F_nouveau_pere: in out Arbre) return Arbre is
-        T_noeud: Arbre;
+    procedure Copier(F_arbre: in Arbre; F_nouveau_pere: in out Arbre) is
     begin
         if Est_vide(F_arbre) then
             raise EMPTY_TREE;
         else
-            T_noeud := new Noeud'(Pere => F_nouveau_pere, Fils => null, Frere => null, Contenu => F_arbre.all.Contenu);
+            Ajouter(F_nouveau_pere, F_arbre.all.Contenu);
         end if;
-
-        return T_noeud;
-    exception
-        when EMPTY_TREE => return F_arbre;
     end Copier;
 
     -- procedure Rechercher: recherche un élément dans un arbre
