@@ -21,8 +21,10 @@ begin
     arg := new Noeud_String'(Valeur => To_Unbounded_String("tata/toto.png"), Suivant => null);
     Lancer(F_sgf => System, F_cmd => Commande'(Nom => touch, Option => none, Args => arg));
 
-    -- Affichage du contenu du répertoire courant
-    Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => none, Args => null));
+    -- Affichage du contenu du répertoire courant (on precise "." pour le répertoire courant)
+    -- C'est l'interpreteur de commande qui s'occupera de ce changement
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("."), Suivant => null);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => none, Args => arg));
 
     -- Affichage du contenu du répertoire courant avec les détails
     arg := new Noeud_String'(Valeur => To_Unbounded_String("tata"), Suivant => null);

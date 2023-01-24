@@ -41,11 +41,7 @@ package body P_SGF is
                 temp_arbre := Rechercher_sgf(F_sgf, chemin, True);
                 Creer_dossier(temp_arbre, Nom_via_chemin(chemin));
             when ls =>
-                if F_cmd.Args = null then
-                    chemin := To_Unbounded_String(".");
-                else
-                    chemin := F_cmd.Args.all.Valeur;
-                end if;
+                chemin := F_cmd.Args.all.Valeur;
                 temp_arbre := Rechercher_sgf(F_sgf, chemin, False);
                 if F_cmd.Option = none then
                     Afficher(temp_arbre);
