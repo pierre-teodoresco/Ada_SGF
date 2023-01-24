@@ -6,6 +6,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 procedure Test_SGF is
     System: SGF;
     arg: Liste_String := null;
+    arg2: Liste_String := null;
 begin
     -- Création du système de gestion de fichier
     System := Creer;
@@ -81,6 +82,23 @@ begin
     -- Supprimer le dossier "tata"
     arg := new Noeud_String'(Valeur => To_Unbounded_String("tata"), Suivant => null);
     Lancer(F_sgf => System, F_cmd => Commande'(Nom => rm, Option => none, Args => arg));
+
+    New_Line;
+
+    -- Copie
+    Put_Line("------------------");
+    Put_Line("cp test.txt tata; ls -l tata");
+    Put_Line("------------------");
+    New_Line;
+
+    -- cp de test.txt dans tata
+    arg2 := new Noeud_String'(Valeur => To_Unbounded_String("tata"), Suivant => null);
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("test.txt"), Suivant => arg2);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => cp, Option => none, Args => arg));
+
+    -- Affichage du contenu du répertoire courant avec les détails
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("tata"), Suivant => null);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => l, Args => arg));
 
     New_Line;
 

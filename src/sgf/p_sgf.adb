@@ -24,7 +24,8 @@ package body P_SGF is
     -- params: F_Cmd: in Commande   - commande à exécuter
     --         F_sgf: in SGF        - SGF sur lequel exécuter la commande
     procedure Lancer(F_sgf: in out SGF; F_cmd: in Commande) is
-        temp_arbre: Arbre;
+        temp_arbre_1: Arbre;
+        temp_arbre_2: Arbre;
         chemin: Unbounded_String := To_Unbounded_String("");
     begin
         -- Agir en fonction de la commande
@@ -34,36 +35,38 @@ package body P_SGF is
                 null;
             when touch =>
                 chemin := F_cmd.Args.all.Valeur;
-                temp_arbre := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => True);
-                Creer_fichier(temp_arbre, Nom_via_chemin(chemin));
+                temp_arbre_1 := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => True);
+                Creer_fichier(temp_arbre_1, Nom_via_chemin(chemin));
             when mkdir =>
                 chemin := F_cmd.Args.all.Valeur;
-                temp_arbre := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => True);
-                Creer_dossier(temp_arbre, Nom_via_chemin(chemin));
+                temp_arbre_1 := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => True);
+                Creer_dossier(temp_arbre_1, Nom_via_chemin(chemin));
             when ls =>
                 chemin := F_cmd.Args.all.Valeur;
-                temp_arbre := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => False);
+                temp_arbre_1 := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => False);
                 if F_cmd.Option = none then
-                    Afficher(temp_arbre);
+                    Afficher(temp_arbre_1);
                 end if;
                 if F_cmd.Option = l then
-                    Afficher_complet(temp_arbre);
+                    Afficher_complet(temp_arbre_1);
                 end if;
             when cd =>
                 chemin := F_cmd.Args.all.Valeur;
-                temp_arbre := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => False);
-                Changer_repertoire(F_sgf, temp_arbre);
+                temp_arbre_1 := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => False);
+                Changer_repertoire(F_sgf, temp_arbre_1);
             when rm => 
                 chemin := F_cmd.Args.all.Valeur;
-                temp_arbre := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => False);
+                temp_arbre_1 := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => False);
                 if F_cmd.Option = r then
-                    Supprimer(F_arbre => temp_arbre, F_est_recursif => True);
+                    Supprimer(F_arbre => temp_arbre_1, F_est_recursif => True);
                 else
-                    Supprimer(F_arbre => temp_arbre, F_est_recursif => False);
+                    Supprimer(F_arbre => temp_arbre_1, F_est_recursif => False);
                 end if;
             when cp =>
-                -- TODO : copier un élément
-                null;
+                chemin := F_cmd.Args.all.Valeur;
+                temp_arbre_1 := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => False);
+                temp_arbre_2 := Rechercher_sgf(F_sgf => F_sgf, F_chemin => F_cmd.Args.all.Suivant.Valeur, F_est_createur => True);
+                Copier(F_arbre => temp_arbre_1, F_cible => temp_arbre_2);
             when mv =>
                 -- TODO : déplacer un élément
                 null;
@@ -223,8 +226,39 @@ package body P_SGF is
             raise DIRECTORY_NOT_EMPTY;
         end if;
     exception
-        when DIRECTORY_NOT_EMPTY => Put_Line("Suppression impossible : le dossier n'est pas vide");
+        when DIRECTORY_NOT_EMPTY => Put_Line("Suppression impossible: le dossier n'est pas vide");
     end Supprimer;
+
+    -- procedure Copier : copie un élément du SGF
+    -- params: F_arbre: in out Arbre
+    --         F_cible: in out Arbre
+    procedure Copier(F_arbre: in out Arbre; F_cible: in out Arbre) is
+        tmp_arbre: Arbre;
+    begin
+        -- vérifier si la cible est un dossier
+        if Contenu(F_cible).Flag /= Dossier then
+            raise NOT_A_DIRECTORY;
+        end if;
+
+        tmp_arbre := Arbre_DF.Rechercher(F_cible, Contenu(F_arbre));
+
+        if Est_vide(tmp_arbre) then
+            tmp_arbre := Arbre_DF.Copier(F_arbre, F_nouveau_pere => F_cible);
+        else
+            tmp_arbre := Arbre_DF.Copier(F_arbre, F_nouveau_pere => F_cible);
+            Modifier_contenu(tmp_arbre, DF'(
+                    Nom => Contenu(tmp_arbre).Nom & "_copie", 
+                    Flag => Contenu(tmp_arbre).Flag, 
+                    Perm => Contenu(tmp_arbre).Perm, 
+                    Taille => Contenu(tmp_arbre).Taille
+                )
+            );
+        end if;
+
+    exception
+        when NOT_A_DIRECTORY => Put_Line("Copie impossible: La cible n'est pas un dossier");
+        when EMPTY_TREE => Put_Line("Probleme lors de la copie");
+    end Copier;
     
     -- procedure Deplacer : déplace un élément du SGF
     -- params: F_Arbre: in out Arbre

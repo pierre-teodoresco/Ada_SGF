@@ -49,6 +49,11 @@ package P_Arbre is
     -- résultat: contenu du noeud
     function Contenu(F_noeud: in Arbre) return Type_Element;
 
+    -- procedure Modifier_contenu: modifie le contenu d'un noeud
+    -- paramètres: F_noeud: noeud dont on veut modifier le contenu
+    --             F_element: nouveau contenu du noeud
+    procedure Modifier_contenu(F_noeud: in out Arbre; F_element: in Type_Element);
+
     -- procedure Ajouter: ajoute un fils à la fin de la liste des fils d'un noeud
     -- paramètres: F_noeud: noeud auquel on veut ajouter un fils
     --             F_element: element à ajouter 
@@ -62,6 +67,12 @@ package P_Arbre is
     -- paramètres: F_noeud: noeud à déplacer
     --             F_nouveau_pere: nouveau père du noeud
     procedure Deplacer(F_noeud: in out Arbre; F_nouveau_pere: in out Arbre);
+
+    -- fonction Copier: copie un arbre
+    -- paramètres: F_arbre: arbre à copier
+    --             F_nouveau_pere: nouveau père du noeud
+    -- résultat: arbre copié
+    function Copier(F_arbre: in Arbre; F_nouveau_pere: in out Arbre) return Arbre;
 
     -- procedure Rechercher: recherche un élément dans un arbre
     -- paramètres: F_arbre: arbre dans lequel on recherche

@@ -86,6 +86,18 @@ package body P_Arbre is
         end if;
     end Contenu;
 
+    -- procedure Modifier_contenu: modifie le contenu d'un noeud
+    -- paramètres: F_noeud: noeud dont on veut modifier le contenu
+    --             F_element: nouveau contenu du noeud
+    procedure Modifier_contenu(F_noeud: in out Arbre; F_element: in Type_Element) is
+    begin
+        if Est_vide(F_noeud) then
+            raise EMPTY_TREE;
+        else
+            F_noeud.all.Contenu := F_element;
+        end if;
+    end Modifier_contenu;
+
     -- procedure Ajouter: ajoute un fils à la fin de la liste des fils d'un noeud
     -- paramètres: F_noeud: noeud auquel on veut ajouter un fils
     --             F_element: element à ajouter
@@ -177,6 +189,24 @@ package body P_Arbre is
         -- Modifier le pere de F_noeud
         F_noeud.all.Pere := F_nouveau_pere;
     end Deplacer;
+
+    -- fonction Copier: copie un arbre
+    -- paramètres: F_arbre: arbre à copier
+    --             F_nouveau_pere: nouveau père du noeud
+    -- résultat: arbre copié
+    function Copier(F_arbre: in Arbre; F_nouveau_pere: in out Arbre) return Arbre is
+        T_noeud: Arbre;
+    begin
+        if Est_vide(F_arbre) then
+            raise EMPTY_TREE;
+        else
+            T_noeud := new Noeud'(Pere => F_nouveau_pere, Fils => null, Frere => null, Contenu => F_arbre.all.Contenu);
+        end if;
+
+        return T_noeud;
+    exception
+        when EMPTY_TREE => return F_arbre;
+    end Copier;
 
     -- procedure Rechercher: recherche un élément dans un arbre
     -- paramètres: F_arbre: arbre dans lequel on recherche
