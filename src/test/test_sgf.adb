@@ -114,6 +114,40 @@ begin
 
     New_Line;
 
+    -- Copie récursive
+    Put_Line("################################################################################");
+    Put(">");
+    Print_chemin_absolu(System);
+    Put_Line("mkdir titi; cp -r tata titi; ls titi; ls tata; ls titi/tata");
+    New_Line;
+
+    -- mkdir titi
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("titi"), Suivant => null);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => mkdir, Option => none, Args => arg));
+
+    -- cp -r tata titi
+    arg2 := new Noeud_String'(Valeur => To_Unbounded_String("titi"), Suivant => null);
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("tata"), Suivant => arg2);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => cp, Option => r, Args => arg));
+
+    -- ls titi
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("titi"), Suivant => null);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => none, Args => arg));
+
+    New_Line;
+
+    -- ls tata
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("tata"), Suivant => null);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => none, Args => arg));  
+
+    New_Line;
+
+    -- ls titi/tata
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("titi/tata"), Suivant => arg2);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => none, Args => arg));
+
+    New_Line;
+
     -- Suppression récursive 
     Put_Line("################################################################################");
     Put(">");
@@ -127,7 +161,9 @@ begin
 
     -- ls /
     arg := new Noeud_String'(Valeur => To_Unbounded_String("/"), Suivant => null);
-    Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => none, Args => arg));
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => none, Args => arg));      
+
+
 
     -- Destruction du SGF
     Detruire(System);

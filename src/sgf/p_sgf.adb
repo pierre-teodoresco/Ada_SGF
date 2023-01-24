@@ -68,7 +68,11 @@ package body P_SGF is
                 cible := F_cmd.Args.all.Suivant.Valeur;
                 temp_arbre_1 := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => False);
                 temp_arbre_2 := Rechercher_sgf(F_sgf => F_sgf, F_chemin => cible, F_est_createur => False);
-                Copier(F_arbre => temp_arbre_1, F_cible => temp_arbre_2);
+                if F_cmd.Option = r then
+                    Copier(F_arbre => temp_arbre_1, F_cible => temp_arbre_2, F_est_recursif => True);
+                else
+                    Copier(F_arbre => temp_arbre_1, F_cible => temp_arbre_2, F_est_recursif => False);
+                end if;
             when mv =>
                 -- TODO : déplacer un élément
                 null;
@@ -96,7 +100,7 @@ package body P_SGF is
     -- params: F_sgf: in out SGF
     procedure Detruire(F_sgf: in out SGF) is
     begin
-        Arbre_DF.Detruire(F_sgf.Courrant);
+        --  Arbre_DF.Detruire(F_sgf.Courrant);
         Arbre_DF.Detruire(F_sgf.Racine);
     end Detruire;
 
@@ -259,7 +263,8 @@ package body P_SGF is
     -- procedure Copier : copie un élément du SGF
     -- params: F_arbre: in Arbre
     --         F_cible: in out Arbre
-    procedure Copier(F_arbre: in Arbre; F_cible: in out Arbre) is
+    --         F_est_recursif: in Boolean
+    procedure Copier(F_arbre: in Arbre; F_cible: in out Arbre; F_est_recursif: in Boolean) is
         tmp_arbre: Arbre;
     begin
         -- vérifier si la cible est un dossier
@@ -267,7 +272,12 @@ package body P_SGF is
             raise NOT_A_DIRECTORY;
         end if;
 
-        Arbre_DF.Copier(F_arbre, F_cible);
+        if F_est_recursif or else Arbre_DF.Est_Feuille(F_arbre) then
+            Arbre_DF.Copier(F_arbre, F_cible);
+        else
+            raise NOT_A_FILE;
+        end if;
+        
     exception
         when NOT_A_DIRECTORY => Put_Line("Copie impossible: La cible n'est pas un dossier");
         when EMPTY_TREE => Put_Line("Probleme lors de la copie");

@@ -27,6 +27,7 @@ package P_SGF is
     PATH_NOT_EXISTS: exception;
     DIRECTORY_NOT_EMPTY: exception;
     NOT_A_DIRECTORY: exception;
+    NOT_A_FILE: exception;
     
     -- Sous-programmes
 
@@ -120,7 +121,8 @@ private
     -- procedure Copier : copie un élément du SGF
     -- params: F_arbre: in Arbre
     --         F_cible: in out Arbre
-    procedure Copier(F_arbre: in Arbre; F_cible: in out Arbre);
+    --         F_est_recursif: in Boolean
+    procedure Copier(F_arbre: in Arbre; F_cible: in out Arbre; F_est_recursif: in Boolean);
     
     -- procedure Deplacer : déplace un élément du SGF
     -- params: F_arbre: in out Arbre
