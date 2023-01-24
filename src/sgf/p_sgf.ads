@@ -105,7 +105,8 @@ private
 
     -- procedure Supprimer : supprime un élément du SGF
     -- params: F_arbre: in out Arbre
-    procedure Supprimer(F_arbre: in out Arbre);
+    --         F_est_recursif: in Boolean
+    procedure Supprimer(F_arbre: in out Arbre; F_est_recursif: in Boolean);
     
     -- procedure Deplacer : déplace un élément du SGF
     -- params: F_arbre: in out Arbre

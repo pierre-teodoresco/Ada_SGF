@@ -82,14 +82,20 @@ begin
     arg := new Noeud_String'(Valeur => To_Unbounded_String("tata"), Suivant => null);
     Lancer(F_sgf => System, F_cmd => Commande'(Nom => rm, Option => none, Args => arg));
 
-    -- Supprimer le fichier "toto.png"
-    arg := new Noeud_String'(Valeur => To_Unbounded_String("tata/toto.png"), Suivant => null);
-    Lancer(F_sgf => System, F_cmd => Commande'(Nom => rm, Option => none, Args => arg));
+    New_Line;
+
+    -- Suppression récursive 
+    Put_Line("------------------");
+    Put_Line("rm -r tata; ls -l");
+    Put_Line("------------------");
+    New_Line;
+
+    -- Supprimer le fichier "tata" avec l'option -r
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("tata"), Suivant => null);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => rm, Option => r, Args => arg));
 
     -- Affichage du contenu du répertoire courant avec les détails
-    arg := new Noeud_String'(Valeur => To_Unbounded_String("/tata"), Suivant => null);
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("/"), Suivant => null);
     Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => l, Args => arg));
-
-    New_Line;
 
 end Test_SGF;
