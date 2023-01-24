@@ -27,6 +27,7 @@ package body P_SGF is
         temp_arbre_1: Arbre;
         temp_arbre_2: Arbre;
         chemin: Unbounded_String := To_Unbounded_String("");
+        cible: Unbounded_String := To_Unbounded_String("");
     begin
         -- Agir en fonction de la commande
         case F_cmd.Nom is
@@ -64,8 +65,9 @@ package body P_SGF is
                 end if;
             when cp =>
                 chemin := F_cmd.Args.all.Valeur;
+                cible := F_cmd.Args.all.Suivant.Valeur;
                 temp_arbre_1 := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => False);
-                temp_arbre_2 := Rechercher_sgf(F_sgf => F_sgf, F_chemin => F_cmd.Args.all.Suivant.Valeur, F_est_createur => True);
+                temp_arbre_2 := Rechercher_sgf(F_sgf => F_sgf, F_chemin => cible, F_est_createur => False);
                 Copier(F_arbre => temp_arbre_1, F_cible => temp_arbre_2);
             when mv =>
                 -- TODO : déplacer un élément
@@ -89,6 +91,14 @@ package body P_SGF is
         end if;
         New_Line;
     end Print_chemin_absolu;
+
+    -- procedure Detruire : détruit le SGF
+    -- params: F_sgf: in out SGF
+    procedure Detruire(F_sgf: in out SGF) is
+    begin
+        Arbre_DF.Detruire(F_sgf.Courrant);
+        Arbre_DF.Detruire(F_sgf.Racine);
+    end Detruire;
 
     -- PRIVATE
 
@@ -128,6 +138,7 @@ package body P_SGF is
     function Rechercher_sgf(F_sgf: in SGF; F_chemin: in Unbounded_String; F_est_createur: in Boolean) return Arbre is
         dfs: Liste_String := Init_liste;
         est_relatif: Boolean := True;
+        result: Arbre;
     begin
         dfs := Separer_chemin(F_chemin);
 
@@ -141,7 +152,11 @@ package body P_SGF is
             Pop_back(dfs);
         end if;
 
-        return Rechercher_via_liste(F_sgf, dfs, est_relatif);
+        result := Rechercher_via_liste(F_sgf, dfs, est_relatif);
+
+        Detruire_liste(dfs);
+
+        return result;
     end Rechercher_sgf;
 
     -- fonction Rechercher_via_liste : recherche un élément à partir d'une liste de noms

@@ -106,6 +106,8 @@ begin
     arg := new Noeud_String'(Valeur => To_Unbounded_String("tata"), Suivant => null);
     Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => none, Args => arg));
 
+    New_Line;
+
     -- ls .
     arg := new Noeud_String'(Valeur => To_Unbounded_String("."), Suivant => null);
     Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => none, Args => arg));
@@ -126,5 +128,8 @@ begin
     -- ls /
     arg := new Noeud_String'(Valeur => To_Unbounded_String("/"), Suivant => null);
     Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => none, Args => arg));
+
+    -- Destruction du SGF
+    Detruire(System);
 
 end Test_SGF;

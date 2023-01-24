@@ -43,6 +43,10 @@ package P_SGF is
     -- params: F_sgf: in SGF
     procedure Print_chemin_absolu(F_sgf: in SGF);
 
+    -- procedure Detruire : détruit le SGF
+    -- params: F_sgf: in out SGF
+    procedure Detruire(F_sgf: in out SGF);
+
 private
     -- packages
 
