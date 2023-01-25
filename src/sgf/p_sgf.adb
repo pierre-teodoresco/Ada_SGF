@@ -11,7 +11,7 @@ package body P_SGF is
         Arbre_Racine: Arbre;
     begin
         -- Création du DF de la racine
-        Racine_DF := DF'(Nom => To_Unbounded_String(""), Flag => Dossier, Perm => 777, Taille => 0);
+        Racine_DF := DF'(Nom => To_Unbounded_String("/"), Flag => Dossier, Perm => 777, Taille => 0);
 
         -- Création de l'arbre de la racine
         Arbre_Racine := Arbre_DF.Creer(Racine_DF);
@@ -32,8 +32,7 @@ package body P_SGF is
         -- Agir en fonction de la commande
         case F_cmd.Nom is
             when pwd =>
-                -- TODO : afficher le chemin du dossier courant
-                null;
+                Put_Line(To_String(Chemin_absolu(F_sgf)));
             when touch =>
                 chemin := F_cmd.Args.all.Valeur;
                 temp_arbre_1 := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => True);
@@ -84,17 +83,17 @@ package body P_SGF is
         when PATH_NOT_EXISTS => Put_Line("Le chemin n'existe pas");
     end Lancer;
 
-    -- procedure Chemin_absolu : retourne le chemin absolu du répertoire courant
+    -- fonction Chemin_absolu : retourne le chemin absolu d'un élément
     -- params: F_sgf: in SGF
-    procedure Print_chemin_absolu(F_sgf: in SGF) is
+    -- retourne : Unbounded_String
+    function Chemin_absolu(F_sgf: in SGF) return Unbounded_String is
     begin
-        if Est_racine(F_sgf.Courrant) then
-            Put("/");
-        else    
-            Chemin_absolu(F_sgf.Courrant);
+        if F_sgf.Courrant = F_sgf.Racine then
+            return To_Unbounded_String("/");
+        else
+            return get_chemin_absolu(F_sgf.Courrant);
         end if;
-        New_Line;
-    end Print_chemin_absolu;
+    end Chemin_absolu;
 
     -- procedure Detruire : détruit le SGF
     -- params: F_sgf: in out SGF
@@ -244,6 +243,7 @@ package body P_SGF is
     procedure Changer_repertoire(F_sgf: in out SGF; F_arbre: in Arbre) is
     begin
         F_sgf.Courrant := F_arbre;
+        Afficher_arbre(F_sgf.Racine);
     end Changer_repertoire;
 
     -- procedure Supprimer : supprime un élément du SGF
@@ -257,7 +257,7 @@ package body P_SGF is
             raise DIRECTORY_NOT_EMPTY;
         end if;
     exception
-        when DIRECTORY_NOT_EMPTY => Put_Line("Suppression impossible: le dossier n'est pas vide");
+        when DIRECTORY_NOT_EMPTY => Put_Line("Suppression impossible: le dossier n'est pas vide (utiliser l'option -r pour supprimer récursivement)");
     end Supprimer;
 
     -- procedure Copier : copie un élément du SGF
@@ -280,6 +280,7 @@ package body P_SGF is
         
     exception
         when NOT_A_DIRECTORY => Put_Line("Copie impossible: La cible n'est pas un dossier");
+        when NOT_A_FILE => Put_Line("Copie impossible: L'élément n'est pas un fichier (utiliser l'option -r)");
         when EMPTY_TREE => Put_Line("Probleme lors de la copie");
     end Copier;
     
@@ -302,17 +303,19 @@ package body P_SGF is
         null;
     end Archiver;
 
-    -- procedure Chemin_absolu : retourne le chemin absolu du repertoire courant
+    -- fonction get_chemin_absolu : retourne le chemin absolu du repertoire courant
     -- params: F_arbre: in Arbre
-    procedure Chemin_absolu(F_arbre: in Arbre) is
+    -- return: Unbounded_String
+    function get_chemin_absolu(F_arbre: in Arbre) return Unbounded_String is
         tmp_arbre: Arbre;
+        tmp_chemin: Unbounded_String;
     begin
         if Est_racine(F_arbre) then
-            null;
+            return To_Unbounded_String("");
         else
-            Chemin_absolu(Pere(F_arbre));
-            Put("/" & To_String(Contenu(F_arbre).Nom));
+            tmp_chemin := get_chemin_absolu(Pere(F_arbre));
+            return tmp_chemin & To_Unbounded_String("/") & Contenu(F_arbre).Nom;
         end if;
-    end Chemin_absolu;
+    end get_chemin_absolu;
 
 end P_SGF;

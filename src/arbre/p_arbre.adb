@@ -1,3 +1,5 @@
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+
 package body P_Arbre is
 
     -- implémentation de Unchecked_Deallocation
@@ -303,4 +305,30 @@ package body P_Arbre is
             Liberer(F_arbre);
         end if;
     end Detruire;
+
+    -- TESTS
+
+    procedure afficher_arbre(F_arbre: in Arbre) is
+        C_tab: Unbounded_String := To_Unbounded_String(" ");
+    begin
+        Affichage_Racine(F_arbre);
+        Afficher_Fils(F_arbre, C_tab);
+    end afficher_arbre;
+
+    procedure Affichage_Racine(F_arbre: in Arbre) is
+    begin
+        Print(F_arbre.all.Contenu);
+    end Affichage_Racine;
+
+    procedure Afficher_Fils(F_arbre: in Arbre; C_tab: in Unbounded_String) is
+        tmp_arbre: Arbre;
+    begin
+        while tmp_arbre /= null loop
+            Put(To_String(C_tab & To_Unbounded_String("├──")));
+            Print(F_arbre.all.Contenu);
+            Afficher_Fils(tmp_arbre, C_tab & To_Unbounded_String("│   "));
+            tmp_arbre := tmp_arbre.all.Frere;
+        end loop;
+    end Afficher_Fils;
+
 end P_Arbre;

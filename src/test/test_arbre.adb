@@ -10,15 +10,15 @@ procedure Test_Arbre is
     begin
         return F_i1 = F_i2;
     end Egal_Entier;
-    package Arbre_Entier is
-        new P_Arbre(Type_Element => Integer, Egal => Egal_Entier);
-    use Arbre_Entier;
-    
+
     -- affichage générique
     procedure Put_Int(F_i: Integer) is 
     begin
         Put(F_i, 2);
     end Put_Int;
+    package Arbre_Entier is
+        new P_Arbre(Type_Element => Integer, Egal => Egal_Entier, Print => Put_Int);
+    use Arbre_Entier;
 
     procedure Afficher_Entier is new Arbre_Entier.Afficher(Afficher_contenu => Put_Int);
 

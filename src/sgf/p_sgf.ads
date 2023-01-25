@@ -40,21 +40,23 @@ package P_SGF is
     --        F_sgf: in SGF - SGF sur lequel exécuter la commande
     procedure Lancer(F_sgf: in out SGF; F_cmd: in Commande);
 
-    -- procedure Chemin_absolu : retourne le chemin absolu du répertoire courant
-    -- params: F_sgf: in SGF
-    procedure Print_chemin_absolu(F_sgf: in SGF);
-
     -- procedure Detruire : détruit le SGF
     -- params: F_sgf: in out SGF
     procedure Detruire(F_sgf: in out SGF);
+
+    -- fonction Chemin_absolu : retourne le chemin absolu d'un élément
+    -- params: F_sgf: in SGF
+    -- retourne : Unbounded_String
+    function Chemin_absolu(F_sgf: in SGF) return Unbounded_String;
 
 private
     -- packages
 
     function Egal_DF(F_1: in DF; F_2: in DF) return Boolean;
+    procedure Afficher_DF_simple(F_df: in DF);
 
     package Arbre_DF is 
-        new P_Arbre(Type_Element => DF, Egal => Egal_DF);
+        new P_Arbre(Type_Element => DF, Egal => Egal_DF, Print => Afficher_DF_simple);
     use Arbre_DF;
     type SGF is record
         Racine: Arbre;
@@ -63,7 +65,6 @@ private
     end record;
 
     procedure Afficher_DF_complet(F_df: in DF);
-    procedure Afficher_DF_simple(F_df: in DF);
 
     procedure Afficher_Arbre_SGF_complet is new Arbre_DF.Afficher(Afficher_Contenu => Afficher_DF_complet);
     procedure Afficher_Arbre_SGF_simple is new Arbre_DF.Afficher(Afficher_Contenu => Afficher_DF_simple);
@@ -135,8 +136,9 @@ private
     --         F_element: in Arbre
     procedure Archiver(F_arbre: in out Arbre; F_element: in Arbre);
 
-    -- procedure Chemin_absolu : retourne le chemin absolu du repertoire courant
+    -- fonction get_chemin_absolu : retourne le chemin absolu du repertoire courant
     -- params: F_arbre: in Arbre
-    procedure Chemin_absolu(F_arbre: in Arbre);
+    -- return: Unbounded_String
+    function get_chemin_absolu(F_arbre: in Arbre) return Unbounded_String;
 
 end P_SGF;

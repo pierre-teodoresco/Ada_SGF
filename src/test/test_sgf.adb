@@ -13,8 +13,7 @@ begin
 
     -- Création d'un fichier
     Put_Line("################################################################################");
-    Put(">");
-    Print_chemin_absolu(System);
+    Put_Line(">" & To_String(Chemin_absolu(System)));
     Put_Line("touch test.txt; mkdir tata; touch tata/toto.png; ls .; ls -l tata");
     New_Line;
 
@@ -42,8 +41,7 @@ begin
 
     -- Changer le répertoire courant pour le dossier "tata"
     Put_Line("################################################################################");
-    Put(">");
-    Print_chemin_absolu(System);
+    Put_Line(">" & To_String(Chemin_absolu(System)));
     Put_Line("cd tata; ls .; ls /");
     New_Line;
 
@@ -65,8 +63,7 @@ begin
 
     -- Supprimer le fichier "/test.txt"
     Put_Line("################################################################################");
-    Put(">");
-    Print_chemin_absolu(System);
+    Put_Line(">" & To_String(Chemin_absolu(System)));
     Put_Line("rm /test.txt; ls /; cd /; rm tata; rm toto.png; ls -l");
     New_Line;
 
@@ -92,8 +89,7 @@ begin
 
     -- Copie
     Put_Line("################################################################################");
-    Put(">");
-    Print_chemin_absolu(System);
+    Put_Line(">" & To_String(Chemin_absolu(System)));
     Put_Line("cp test.txt tata; ls tata; ls .");
     New_Line;
 
@@ -116,8 +112,7 @@ begin
 
     -- Copie récursive
     Put_Line("################################################################################");
-    Put(">");
-    Print_chemin_absolu(System);
+    Put_Line(">" & To_String(Chemin_absolu(System)));
     Put_Line("mkdir titi; cp -r tata titi; ls titi; ls tata; ls titi/tata");
     New_Line;
 
@@ -148,10 +143,24 @@ begin
 
     New_Line;
 
+    -- Working directory
+    Put_Line("################################################################################");
+    Put_Line(">" & To_String(Chemin_absolu(System)));
+    Put_Line("cd titi/tata; pwd;");
+    New_Line;
+
+    -- cd titi/tata
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("titi/tata"), Suivant => null);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => cd, Option => none, Args => arg));
+
+    -- pwd
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => pwd, Option => none, Args => null));
+
+    New_Line;
+
     -- Suppression récursive 
     Put_Line("################################################################################");
-    Put(">");
-    Print_chemin_absolu(System);
+    Put_Line(">" & To_String(Chemin_absolu(System)));
     Put_Line("rm -r tata; ls /");
     New_Line;
 
