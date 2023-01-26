@@ -253,7 +253,13 @@ package body P_SGF is
     --         F_arbre: in Arbre
     procedure Changer_repertoire(F_sgf: in out SGF; F_arbre: in Arbre) is
     begin
-        F_sgf.Courrant := F_arbre;
+        if Contenu(F_arbre).Flag = Dossier then
+            F_sgf.Courrant := F_arbre;
+        else
+            raise NOT_A_DIRECTORY;
+        end if;
+    exception
+        when NOT_A_DIRECTORY => Put_Line("Changement de répertoire impossible: l'élément n'est pas un dossier");
     end Changer_repertoire;
 
     -- procedure Supprimer : supprime un élément du SGF
