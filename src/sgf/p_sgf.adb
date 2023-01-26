@@ -42,7 +42,11 @@ package body P_SGF is
                 temp_arbre_1 := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => True);
                 Creer_dossier(temp_arbre_1, Nom_via_chemin(chemin));
             when ls =>
-                chemin := F_cmd.Args.all.Valeur;
+                if F_cmd.Args = null then
+                    null;
+                else
+                    chemin := F_cmd.Args.all.Valeur;
+                end if;
                 temp_arbre_1 := Rechercher_sgf(F_sgf => F_sgf, F_chemin => chemin, F_est_createur => False);
                 if F_cmd.Option = none then
                     Afficher(temp_arbre_1);

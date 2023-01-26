@@ -1,12 +1,12 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with P_SGF; use P_SGF;
 with P_Chaine; use P_Chaine;
-
+with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Text_IO.Unbounded_IO; use Ada.Text_IO.Unbounded_IO;
 package P_Cli is
 
-    -- procedure Run: execute la commande saisie par l'utilisateur
-    -- params: F_input: Unbounded_String    - input utilsateur
-   procedure Run(F_input: in Unbounded_String);
+    -- procedure Run: execute l'interface de commande
+   procedure Run;
 
     -- procedure Run_test: execute les tests
     -- params: F_input: Unbounded_String    - input utilsateur

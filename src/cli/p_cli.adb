@@ -1,25 +1,35 @@
-with Ada.Text_IO; use Ada.Text_IO;
-
 package body P_Cli is
 
-    procedure Run(F_input: in Unbounded_String) is
+    procedure Run is
+        input: Unbounded_String;
         System: SGF := P_SGF.Creer;
-        input: Liste_String := Separer_commande(F_input);
-        cmd: Unbounded_String := Get_cmd(input);
-        args: Liste_String := Get_args(input);
-        opt: Unbounded_String := Get_opt(input);
-        the_cmd: Commande;
+        nom: Unbounded_String;
+        args: Liste_String;
+        opt: Unbounded_String;
+        cmd: Commande;
     begin
-        loop            
-            the_cmd.Nom := Commandes'Value(To_String(cmd));
-            the_cmd.Args := args;
-            the_cmd.Option := Options'Value(To_String(opt));
-            
-            Lancer(F_sgf => System, F_cmd => the_cmd);
-        exit when To_String(cmd) = "exit";
+        loop 
+            Put(">" & To_String(Chemin_absolu(System)) & "$ ");
+
+            Get_Line(input);
+            exit when input = "exit";
+
+            if input = "" then
+                null;
+            else
+                nom := Get_cmd(Separer_commande(input));
+                args := Get_args(Separer_commande(input));
+                opt := Get_opt(Separer_commande(input));
+
+                cmd.Nom := Commandes'Value(To_String(nom));
+                cmd.Args := args;
+                cmd.Option := Options'Value(To_String(opt));
+                
+                Lancer(F_sgf => System, F_cmd => cmd);
+            end if;
         end loop;
-    exception
-        when CONSTRAINT_ERROR => Put_Line("La commande ou les options sont incorrectes.");
+    --  exception
+        --  when Constraint_Error => Put_Line("Commande ou option inconnue");
     end Run;
 
     procedure Run_test(F_input: in Unbounded_String) is
@@ -44,8 +54,11 @@ package body P_Cli is
     function Get_args(F_input: in Liste_String) return Liste_String is
         args: Liste_String := Init_liste;
         taille: Integer := Taille_liste(F_input);
+        str: Unbounded_String := Get_liste(F_input, 2);
     begin
-        if To_String(Get_liste(F_input, 2))(1) = '-' then
+        if To_String(str) = "" then
+            null;
+        elsif To_String(str)(1) = '-' then
             -- l'input a des options
             -- on parcours de l'element 3 a la fin de la liste
             for i in 3 .. taille loop
@@ -68,8 +81,10 @@ package body P_Cli is
         opt: Unbounded_String;
     begin
         opt := Get_liste(F_input, 2);
-        if To_String(opt)(1) = '-' then
-            return opt;
+        if To_String(opt) = "" then
+            return To_Unbounded_String("none");
+        elsif To_String(opt)(1) = '-' then
+            return Unbounded_Slice(opt, 2, Length(opt));
         else
             return To_Unbounded_String("none");
         end if;

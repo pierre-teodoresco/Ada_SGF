@@ -42,10 +42,8 @@ package body P_Chaine is
         end if;
     exception
         when LISTE_VIDE =>
-            Put_Line("La liste est vide");
             return To_Unbounded_String("");
         when OUT_OF_BOUNDS =>
-            Put_Line("L'indice est trop grand");
             return To_Unbounded_String("");
     end Get_liste;
 
@@ -71,7 +69,11 @@ package body P_Chaine is
 
     function Est_absolu(F_chemin: in Unbounded_String) return Boolean is
     begin
-        return To_String(F_chemin)(1) = '/';
+        if Length(F_chemin) = 0 then
+            return False;
+        else
+            return To_String(F_chemin)(1) = '/';
+        end if;
     end Est_absolu;
 
     function Separer_chemin(F_chemin: in Unbounded_String) return Liste_String is
