@@ -9,7 +9,7 @@ package body P_Cli is
         cmd: Commande;
     begin
         loop 
-            Put(">" & To_String(Chemin_absolu(System)) & "$ ");
+            Put(">" & To_String(Chemin_absolu(System)) & " $ ");
 
             Get_Line(input);
             exit when input = "exit";
