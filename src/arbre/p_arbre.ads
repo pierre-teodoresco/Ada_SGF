@@ -6,7 +6,6 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 generic
     type Type_Element is private;
     with function Egal(F_element1: in Type_Element; F_element2: in Type_Element) return Boolean;
-    with procedure Print(F_element: in Type_Element);
 package P_Arbre is
     -- types
     type Arbre is private;
@@ -106,14 +105,6 @@ package P_Arbre is
     -- procedure Detruire: détruit un arbre
     -- paramètres: F_arbre: arbre à détruire
     procedure Detruire(F_arbre: in out Arbre);
-
-    -- procedure Afficher_entier: affiche l'arbre en entier
-    -- paramètres: F_arbre: arbre à afficher
-    procedure Afficher_arbre(F_arbre: in Arbre);
-
-    procedure Affichage_Racine(F_arbre: in Arbre);
-    procedure Afficher_Fils(F_arbre: in Arbre; C_tab: in Unbounded_String);
-    
 private
     type Noeud;
     type Arbre is access Noeud;

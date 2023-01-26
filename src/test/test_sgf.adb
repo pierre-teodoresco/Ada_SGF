@@ -146,11 +146,15 @@ begin
     -- Working directory
     Put_Line("################################################################################");
     Put_Line(">" & To_String(Chemin_absolu(System)));
-    Put_Line("cd titi/tata; pwd;");
+    Put_Line("cd /titi; cd tata; pwd;");
     New_Line;
 
-    -- cd titi/tata
-    arg := new Noeud_String'(Valeur => To_Unbounded_String("titi/tata"), Suivant => null);
+    -- cd /titi
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("/titi"), Suivant => null);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => cd, Option => none, Args => arg));
+
+    -- cd tata
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("tata"), Suivant => null);
     Lancer(F_sgf => System, F_cmd => Commande'(Nom => cd, Option => none, Args => arg));
 
     -- pwd

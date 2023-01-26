@@ -53,10 +53,9 @@ private
     -- packages
 
     function Egal_DF(F_1: in DF; F_2: in DF) return Boolean;
-    procedure Afficher_DF_simple(F_df: in DF);
 
     package Arbre_DF is 
-        new P_Arbre(Type_Element => DF, Egal => Egal_DF, Print => Afficher_DF_simple);
+        new P_Arbre(Type_Element => DF, Egal => Egal_DF);
     use Arbre_DF;
     type SGF is record
         Racine: Arbre;
@@ -65,6 +64,7 @@ private
     end record;
 
     procedure Afficher_DF_complet(F_df: in DF);
+    procedure Afficher_DF_simple(F_df: in DF);
 
     procedure Afficher_Arbre_SGF_complet is new Arbre_DF.Afficher(Afficher_Contenu => Afficher_DF_complet);
     procedure Afficher_Arbre_SGF_simple is new Arbre_DF.Afficher(Afficher_Contenu => Afficher_DF_simple);

@@ -153,6 +153,8 @@ package body P_SGF is
 
         if F_est_createur then
             Pop_back(dfs);
+        else
+            null;
         end if;
 
         result := Rechercher_via_liste(F_sgf, dfs, est_relatif);
@@ -198,6 +200,8 @@ package body P_SGF is
                 -- si l'element n'existe pas ou si on est sur un fichier sans être à la fin du chemin on leve une exception
                 if Arbre_DF.Est_vide(tmp_arbre) or else (i < Taille_liste(F_dfs) and tmp_df.Flag = Fichier) then
                     raise PATH_NOT_EXISTS;
+                else
+                    null;
                 end if;
             end if;
         end loop;
@@ -243,7 +247,6 @@ package body P_SGF is
     procedure Changer_repertoire(F_sgf: in out SGF; F_arbre: in Arbre) is
     begin
         F_sgf.Courrant := F_arbre;
-        Afficher_arbre(F_sgf.Racine);
     end Changer_repertoire;
 
     -- procedure Supprimer : supprime un élément du SGF
@@ -270,14 +273,13 @@ package body P_SGF is
         -- vérifier si la cible est un dossier
         if Contenu(F_cible).Flag /= Dossier then
             raise NOT_A_DIRECTORY;
-        end if;
-
-        if F_est_recursif or else Arbre_DF.Est_Feuille(F_arbre) then
-            Arbre_DF.Copier(F_arbre, F_cible);
         else
-            raise NOT_A_FILE;
+            if F_est_recursif or else Arbre_DF.Est_Feuille(F_arbre) then
+                Arbre_DF.Copier(F_arbre, F_cible);
+            else
+                raise NOT_A_FILE;
+            end if;
         end if;
-        
     exception
         when NOT_A_DIRECTORY => Put_Line("Copie impossible: La cible n'est pas un dossier");
         when NOT_A_FILE => Put_Line("Copie impossible: L'élément n'est pas un fichier (utiliser l'option -r)");
