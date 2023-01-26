@@ -17,6 +17,15 @@ package body P_Chaine is
             return Taille_liste(F_liste.Suivant) + 1;
         end if;
     end Taille_liste;
+    
+    procedure Ajouter_liste(F_liste: in out Liste_String; F_chaine: in Unbounded_String) is
+    begin
+        if F_liste = null then
+            F_liste := new Noeud_String'(Valeur => F_chaine, Suivant => null);
+        else
+            Ajouter_liste(F_liste.Suivant, F_chaine);
+        end if;
+    end Ajouter_liste;
 
     function Get_liste(F_liste: in Liste_String; F_indice: in Integer) return Unbounded_String is
     begin
@@ -101,6 +110,35 @@ package body P_Chaine is
 
     end Separer_chemin;
 
+    function Separer_commande(F_commande: in Unbounded_String) return Liste_String is
+        elem: Unbounded_String;
+        commande: Unbounded_String := F_commande;
+        liste: Liste_String;
+        i: Integer := 1;
+    begin
+        -- parcourir la chaine et ajouter à chaque espace un élément dans la liste
+        while commande /= To_Unbounded_String("") and then i <= Length(commande) loop
+            if To_String(commande)(i) = ' ' then
+                -- slice de la chaine de 1 à i-1
+                elem := Unbounded_Slice(commande, 1, i-1);
+                -- ajouter chemin à la liste
+                Ajouter_liste(liste, elem);
+                -- slice de la chaine de i+1 à la fin
+                commande := Unbounded_Slice(commande, i+1, Length(commande));
+                -- remettre i à 1
+                i := 1;
+            else
+                i := i + 1;
+            end if;
+        end loop;
+
+        -- ajouter le dernier élément
+        Ajouter_liste(liste, commande);
+
+        return liste;
+
+    end Separer_commande;
+
     procedure Pop_back(F_liste: in out Liste_String) is
     begin
         if F_liste /= null then
@@ -127,16 +165,5 @@ package body P_Chaine is
             afficher_liste(F_liste.Suivant);
         end if;
     end afficher_liste;
-
-    -- Private
-
-    procedure Ajouter_liste(F_liste: in out Liste_String; F_chaine: in Unbounded_String) is
-    begin
-        if F_liste = null then
-            F_liste := new Noeud_String'(Valeur => F_chaine, Suivant => null);
-        else
-            Ajouter_liste(F_liste.Suivant, F_chaine);
-        end if;
-    end Ajouter_liste;
 
 end P_Chaine;

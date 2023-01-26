@@ -27,6 +27,11 @@ package P_Chaine is
     -- retourne : Integer
     function Taille_liste(F_liste: in Liste_String) return Integer;
 
+    -- procedure Ajouter_liste : ajoute une chaine en fin de liste
+    -- params: F_liste: in out Liste_String    - liste à modifier
+    --         F_chaine: in Unbounded_String  - chaine à ajouter
+    procedure Ajouter_liste(F_liste: in out Liste_String; F_chaine: in Unbounded_String);
+
     -- fonction Get_liste : retourne la chaine à l'indice donné
     -- params: F_liste: in Liste_String    - liste à tester
     --         F_indice: in Integer        - indice de la chaine à retourner
@@ -47,10 +52,15 @@ package P_Chaine is
     -- retourne : Boolean
     function Est_absolu(F_chemin: in Unbounded_String) return Boolean;
 
-    -- procedure Separer_chemin : sépare un chemin en un tableau de chaines
+    -- fonction Separer_chemin : sépare un chemin en un tableau de chaines
     -- params: F_chemin: in Unbounded_String        - chemin à séparer
     -- retourne : Liste_String
     function Separer_chemin(F_chemin: in Unbounded_String) return Liste_String;
+
+    -- fonction Separer_commande : sépare une commande en une Liste String
+    -- params: F_commande: in Unbounded_String      - commande à séparer
+    -- retourne : Liste_String
+    function Separer_commande(F_commande: in Unbounded_String) return Liste_String;
 
     -- procedure Pop_back : supprime le dernier élément d'une liste de chaines
     -- params: F_liste: in out Liste_String    - liste à modifier
@@ -65,12 +75,5 @@ package P_Chaine is
     -- procedure afficher_liste : affiche une liste de chaines
     -- params: F_liste: in Liste_String - liste à afficher
     procedure Afficher_liste(F_liste: in Liste_String);
-
-private
-    
-    -- procedure Ajouter_liste : ajoute une chaine en fin de liste
-    -- params: F_liste: in out Liste_String    - liste à modifier
-    --         F_chaine: in Unbounded_String  - chaine à ajouter
-    procedure Ajouter_liste(F_liste: in out Liste_String; F_chaine: in Unbounded_String);
 
 end P_Chaine;

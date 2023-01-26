@@ -12,10 +12,12 @@ begin
     ll_chaine := Separer_chemin(To_Unbounded_String("/tata/toto.txt"));
     pragma Assert(Taille_liste(ll_chaine) = 3);
     afficher_liste(ll_chaine);
+    New_Line;
 
     ll_chaine := Separer_chemin(To_Unbounded_String("tata/toto.txt"));
     pragma Assert(Taille_liste(ll_chaine) = 2);
     afficher_liste(ll_chaine);
+    New_Line;
 
     pragma Assert(Get_liste(ll_chaine, 1) = To_Unbounded_String("tata"));
     pragma Assert(Get_liste(ll_chaine, 2) = To_Unbounded_String("toto.txt"));
@@ -28,5 +30,15 @@ begin
     pragma Assert(Taille_liste(ll_chaine) = 0);
 
     pragma Assert(Get_liste(ll_chaine, 1) = To_Unbounded_String(""));
+
+    ll_chaine := Separer_commande(To_Unbounded_String("touch tata/toto.txt"));
+    pragma Assert(Taille_liste(ll_chaine) = 2);
+    afficher_liste(ll_chaine);
+    New_Line;
+
+    ll_chaine := Separer_commande(To_Unbounded_String("cp -r tata/toto.txt titi"));
+    pragma Assert(Taille_liste(ll_chaine) = 4);
+    afficher_liste(ll_chaine);
+    New_Line;
 
 end Test_Chaine;
