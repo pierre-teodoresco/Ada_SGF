@@ -21,15 +21,17 @@ package body P_Cli is
                 args := Get_args(Separer_commande(input));
                 opt := Get_opt(Separer_commande(input));
 
-                cmd.Nom := Commandes'Value(To_String(nom));
-                cmd.Args := args;
-                cmd.Option := Options'Value(To_String(opt));
-                
-                Lancer(F_sgf => System, F_cmd => cmd);
+                begin
+                    cmd.Nom := Commandes'Value(To_String(nom));
+                    cmd.Args := args;
+                    cmd.Option := Options'Value(To_String(opt));
+
+                    Lancer(F_sgf => System, F_cmd => cmd);
+                exception
+                    when Constraint_Error => Put_Line("Commande ou option inconnue");
+                end;
             end if;
         end loop;
-    --  exception
-        --  when Constraint_Error => Put_Line("Commande ou option inconnue");
     end Run;
 
     procedure Run_test(F_input: in Unbounded_String) is
