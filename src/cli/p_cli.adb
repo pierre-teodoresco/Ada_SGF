@@ -1,4 +1,25 @@
+with Ada.Text_IO; use Ada.Text_IO;
+
 package body P_Cli is
+
+    procedure Run(F_input: in Unbounded_String) is
+    begin
+        null;
+    end Run;
+
+    procedure Run_test(F_input: in Unbounded_String) is
+        input: Liste_String := Separer_commande(F_input);
+        cmd: Unbounded_String := Get_cmd(input);
+        args: Liste_String := Get_args(input);
+        opt: Unbounded_String := Get_opt(input);
+    begin
+        Put_Line("Commande: " & To_String(cmd));
+        Put_Line("Options: " & To_String(opt));
+        Put_Line("Arguments: ");
+        Afficher_liste(args);
+    end Run_test;
+
+    -- PRIVATE
 
     function Get_cmd(F_input: in Liste_String) return Unbounded_String is
     begin
@@ -9,7 +30,7 @@ package body P_Cli is
         args: Liste_String := Init_liste;
         taille: Integer := Taille_liste(F_input);
     begin
-        if To_String(Get_liste(F_input, 2))(1) = "-" then
+        if To_String(Get_liste(F_input, 2))(1) = '-' then
             -- l'input a des options
             -- on parcours de l'element 3 a la fin de la liste
             for i in 3 .. taille loop
@@ -32,7 +53,7 @@ package body P_Cli is
         opt: Unbounded_String;
     begin
         opt := Get_liste(F_input, 2);
-        if To_String(opt)(1) = "-" then
+        if To_String(opt)(1) = '-' then
             return opt;
         else
             return To_Unbounded_String("none");
