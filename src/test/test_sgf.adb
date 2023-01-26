@@ -146,7 +146,7 @@ begin
     -- Working directory
     Put_Line("################################################################################");
     Put_Line(">" & To_String(Chemin_absolu(System)));
-    Put_Line("cd /titi; cd tata; pwd;");
+    Put_Line("cd /titi; cd tata; pwd; cd ..; pwd; cd /titi/tata; pwd");
     New_Line;
 
     -- cd /titi
@@ -155,6 +155,22 @@ begin
 
     -- cd tata
     arg := new Noeud_String'(Valeur => To_Unbounded_String("tata"), Suivant => null);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => cd, Option => none, Args => arg));
+
+    -- pwd
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => pwd, Option => none, Args => null));
+
+    New_Line;
+
+    -- cd ..
+    arg := new Noeud_String'(Valeur => To_Unbounded_String(".."), Suivant => null);
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => cd, Option => none, Args => arg));
+
+    -- pwd
+    Lancer(F_sgf => System, F_cmd => Commande'(Nom => pwd, Option => none, Args => null));
+
+    -- cd /titi/tata
+    arg := new Noeud_String'(Valeur => To_Unbounded_String("/titi/tata"), Suivant => null);
     Lancer(F_sgf => System, F_cmd => Commande'(Nom => cd, Option => none, Args => arg));
 
     -- pwd

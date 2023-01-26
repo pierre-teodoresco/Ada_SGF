@@ -258,28 +258,6 @@ package body P_Arbre is
         end if;
     end Rechercher;
 
-    -- procedure Rechercher_fils : recherche un fils d'un noeud
-    -- paramètres: F_pere: père du fils recherché
-    --             F_element: élément à rechercher
-    -- résultat: noeud contenant l'élément recherché
-    function Rechercher_fils(F_pere: in Arbre; F_element: in Type_Element) return Arbre is
-        T_noeud: Arbre;
-    begin
-        if Est_vide(F_pere) then
-            return null;
-        else
-            T_noeud := F_pere.all.Fils;
-            while T_noeud /= null loop
-                if Egal(T_noeud.all.Contenu, F_element) then
-                    return T_noeud;
-                else
-                    T_noeud := T_noeud.all.Frere;
-                end if;
-            end loop;
-            return null;
-        end if;
-    end Rechercher_fils;
-
     --  procedure Afficher: affiche un arbre
     --  paramètres: F_arbre: arbre à afficher
     procedure Afficher(F_arbre: in Arbre) is

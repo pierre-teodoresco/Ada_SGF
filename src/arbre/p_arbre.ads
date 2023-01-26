@@ -90,12 +90,6 @@ package P_Arbre is
     -- résultat: noeud contenant l'élément recherché
     function Rechercher(F_arbre: in Arbre; F_element: in Type_Element) return Arbre;
 
-    -- procedure Rechercher_fils : recherche un fils d'un noeud
-    -- paramètres: F_pere: père du fils recherché
-    --             F_element: élément à rechercher
-    -- résultat: noeud contenant l'élément recherché
-    function Rechercher_fils(F_pere: in Arbre; F_element: in Type_Element) return Arbre;
-
     -- procedure Afficher: affiche un arbre
     -- paramètres: F_arbre: arbre à afficher
     generic

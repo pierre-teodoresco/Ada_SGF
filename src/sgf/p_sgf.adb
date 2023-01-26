@@ -185,20 +185,23 @@ package body P_SGF is
     function Rechercher_df(F_arbre: in Arbre; F_dfs: in Liste_String) return Arbre is
         tmp_arbre: Arbre := F_arbre;
         tmp_df: DF;
+        tmp_nom: Unbounded_String;
+        taille: Natural := Taille_liste(F_dfs);
     begin
-        for i in 1..Taille_liste(F_dfs) loop
+        for i in 1..taille loop
+            tmp_nom := Get_liste(F_dfs, i); 
             -- on verifie si on doit prendre le pere sur ".."
-            if Get_liste(F_dfs, i) = ".." then
+            if tmp_nom = ".." then
                 tmp_arbre := Pere(tmp_arbre);
             else
                 -- on cree la df
-                tmp_df := DF'(Nom => Get_liste(F_dfs, i), Flag => Dossier, Perm => 777, Taille => 0);
+                tmp_df := DF'(Nom => tmp_nom, Flag => Dossier, Perm => 777, Taille => 0);
                 -- on recherche l'element
-                tmp_arbre := Rechercher(F_arbre, tmp_df);
+                tmp_arbre := Rechercher(tmp_arbre, tmp_df);
                 -- on recupere le contenu de l'element
                 tmp_df := Contenu(tmp_arbre);
                 -- si l'element n'existe pas ou si on est sur un fichier sans être à la fin du chemin on leve une exception
-                if Arbre_DF.Est_vide(tmp_arbre) or else (i < Taille_liste(F_dfs) and tmp_df.Flag = Fichier) then
+                if Arbre_DF.Est_vide(tmp_arbre) or else (i < taille and tmp_df.Flag = Fichier) then
                     raise PATH_NOT_EXISTS;
                 else
                     null;
