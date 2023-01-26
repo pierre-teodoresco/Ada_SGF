@@ -192,8 +192,6 @@ begin
     arg := new Noeud_String'(Valeur => To_Unbounded_String("/"), Suivant => null);
     Lancer(F_sgf => System, F_cmd => Commande'(Nom => ls, Option => none, Args => arg));      
 
-
-
     -- Destruction du SGF
     Detruire(System);
 

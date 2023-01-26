@@ -290,10 +290,9 @@ package body P_SGF is
     end Copier;
     
     -- procedure Deplacer : déplace un élément du SGF
-    -- params: F_Arbre: in out Arbre
-    --         F_Element: in Arbre
-    --         F_Parent: in Arbre
-    procedure Deplacer(F_Arbre: in out Arbre; F_Element: in Arbre; F_Parent: in Arbre) is
+    -- params: F_arbre: in out Arbre    - arbre à déplacer
+    --         F_cible: in out Arbre    - arbre cible 
+    procedure Deplacer(F_arbre: in out Arbre; F_cible: in out Arbre) is
     begin
         -- TODO : déplacer un élément
         null;
